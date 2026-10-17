@@ -1,0 +1,23 @@
+# Dalmas Studio
+
+> Estúdio de desenvolvimento web em Caxias do Sul (RS) que cria sites, landing pages, sistemas web sob medida e integrações para pequenos negócios. Preço fixo por escopo, hospedagem própria cobrada em mensalidade (domínio, SSL e suporte inclusos) e diagnóstico em até 7 dias.
+
+## Serviços
+- Landing pages: páginas focadas em conversão, performance e SEO.
+- Sistemas web sob medida: CRMs, painéis e sistemas de agendamento.
+- APIs e integrações: conexão de ERP, loja, WhatsApp e financeiro.
+
+## Como trabalhamos
+- Diagnóstico gratuito, escopo e proposta com valores fixos, construção com entregas semanais em ambiente de teste e operação após o lançamento.
+- Todo projeto sai com documentação (fluxos e instruções de operação).
+
+## Projetos
+- Dauth (https://dauth.com.br): sistema de agendamento e gestão para salões de beleza.
+- Uminum (https://uminum.com.br): site institucional.
+- Trivector Engenharia (https://trivectorengenharia.com.br): site institucional de empresa de engenharia.
+
+## Contato
+- Site: https://dalmasstudio.com.br/
+- WhatsApp: https://wa.me/5554984096156
+- LinkedIn: https://www.linkedin.com/in/augustordalmas/
+- GitHub: https://github.com/Augustodalmas
