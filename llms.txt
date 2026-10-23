@@ -17,6 +17,7 @@
 - Trivector Engenharia (https://trivectorengenharia.com.br): site institucional de empresa de engenharia.
 
 ## Contato
+- CNPJ: 69.765.693/0001-00
 - Site: https://dalmasstudio.com.br/
 - WhatsApp: https://wa.me/5554984096156
 - LinkedIn: https://www.linkedin.com/in/augustordalmas/
