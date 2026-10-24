@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Criação de Sites e Sistemas em Caxias do Sul | Dalmas Studio</title>
   <meta name="description"
-    content="Sites, landing pages e sistemas sob medida para pequenos negócios em Caxias do Sul. Preço fixo, hospedagem inclusa e diagnóstico em até 7 dias.">
+    content="Sites, landing pages e sistemas sob medida para pequenos negócios em Caxias do Sul. Preço fixo, hospedagem com mensalidade fixa e diagnóstico em até 7 dias.">
   <meta name="author" content="Dalmas Studio">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://dalmasstudio.com.br/">
@@ -16,7 +16,7 @@
   <meta property="og:url" content="https://dalmasstudio.com.br/">
   <meta property="og:title" content="Criação de Sites e Sistemas em Caxias do Sul | Dalmas Studio">
   <meta property="og:description"
-    content="Landing pages e sistemas sob medida para salões, clínicas e lojas. Preço fixo, hospedagem própria via mensalidade, diagnóstico em até 7 dias.">
+    content="Sites, landing pages e sistemas sob medida para o seu negócio. Preço fechado, hospedagem com mensalidade fixa e diagnóstico em até 7 dias.">
   <meta property="og:image" content="https://dalmasstudio.com.br/public/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -28,7 +28,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Criação de Sites e Sistemas em Caxias do Sul | Dalmas Studio">
   <meta name="twitter:description"
-    content="Landing pages e sistemas sob medida para salões, clínicas e lojas. Preço fixo, hospedagem própria via mensalidade, diagnóstico em até 7 dias.">
+    content="Sites, landing pages e sistemas sob medida para o seu negócio. Preço fechado, hospedagem com mensalidade fixa e diagnóstico em até 7 dias.">
   <meta name="twitter:image" content="https://dalmasstudio.com.br/public/og-image.png">
 
   <!-- Favicon -->
@@ -49,7 +49,7 @@
     "url": "https://dalmasstudio.com.br",
     "logo": "https://dalmasstudio.com.br/public/logo-dalmas-full.png",
     "image": "https://dalmasstudio.com.br/public/logo-dalmas-full.png",
-    "description": "Estúdio de desenvolvimento web especializado em landing pages e sistemas sob medida para pequenos negócios. Hospedagem inclusa, preço fixo.",
+    "description": "Estúdio de desenvolvimento web especializado em landing pages e sistemas sob medida para pequenos negócios. Hospedagem com mensalidade fixa, preço fechado.",
     "telephone": "+55-54-98409-6156",
     "address": {
       "@type": "PostalAddress",
@@ -338,26 +338,6 @@
       margin: 0 auto;
     }
 
-    .hero-eyebrow {
-      font-family: var(--font-mono);
-      font-size: 11px;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--ink-dim);
-      margin-bottom: 20px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .hero-eyebrow::before {
-      content: '';
-      width: 24px;
-      height: 1px;
-      background: var(--shell);
-      flex-shrink: 0;
-    }
-
     .hero h1 {
       font-family: var(--font-display);
       font-size: clamp(48px, 12vw, 144px);
@@ -389,18 +369,6 @@
       transform: skewY(-2deg);
     }
 
-    .hero-sub {
-      margin-top: 28px;
-      font-size: 16px;
-      line-height: 1.6;
-      color: var(--ink-dim);
-    }
-
-    .hero-sub strong {
-      color: var(--ink);
-      font-weight: 500;
-    }
-
     .hero-actions {
       margin-top: 32px;
       display: flex;
@@ -410,6 +378,44 @@
 
     .hero-actions .btn {
       justify-content: center;
+    }
+
+    /* ─── Apresentação (texto que saiu do hero) ─── */
+    .intro {
+      padding-top: 0;
+    }
+
+    .hero-sub {
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--ink-dim);
+      margin: 0;
+    }
+
+    .intro-title {
+      font-family: var(--font-display);
+      font-size: clamp(28px, 4.5vw, 56px);
+      line-height: 1.08;
+      letter-spacing: -0.025em;
+      font-weight: 400;
+      text-align: center;
+      max-width: 900px;
+      margin: 0 auto 24px;
+    }
+
+    .intro-title em {
+      font-style: italic;
+      color: var(--shell);
+    }
+
+    .intro .hero-sub {
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .hero-sub strong {
+      color: var(--ink);
+      font-weight: 500;
     }
 
     .hero-meta {
@@ -477,13 +483,8 @@
         padding: 120px 56px 96px;
       }
 
-      .hero-eyebrow {
-        font-size: 12px;
-      }
-
       .hero-sub {
         font-size: 18px;
-        margin-top: 40px;
       }
 
       .hero-actions {
@@ -503,6 +504,29 @@
 
       .hero .strike::after {
         height: 4px;
+      }
+    }
+
+    /* Desktop: hero ocupa 100% da primeira dobra (viewport − nav de 96px).
+       268px = nav 96 + padding 2×40 + botões ~92; 3.68 = 4 linhas × line-height .92 */
+    @media (min-width: 1024px) and (min-height: 560px) {
+      .hero {
+        min-height: calc(100vh - 96px);
+        min-height: calc(100svh - 96px);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding-top: 40px;
+        padding-bottom: 40px;
+      }
+
+      .hero h1 {
+        font-size: clamp(48px, min(13vw, calc((100vh - 268px) / 3.68)), 240px);
+        font-size: clamp(48px, min(13vw, calc((100svh - 268px) / 3.68)), 240px);
+      }
+
+      .hero-actions {
+        margin-top: 40px;
       }
     }
 
@@ -1225,29 +1249,14 @@
       }
     }
 
-    .hero-eyebrow {
-      animation: fade-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
-      animation-delay: 0.05s;
-    }
-
     .hero h1 {
       animation: fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
-      animation-delay: 0.15s;
-    }
-
-    .hero-sub {
-      animation: fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
-      animation-delay: 0.28s;
+      animation-delay: 0.1s;
     }
 
     .hero-actions {
       animation: fade-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
-      animation-delay: 0.40s;
-    }
-
-    .hero-meta {
-      animation: fade-in 0.8s ease both;
-      animation-delay: 0.55s;
+      animation-delay: 0.3s;
     }
 
     /* ─── Fundo com grain + gradiente radial ─── */
@@ -1332,20 +1341,24 @@
   <main>
   <!-- Hero -->
   <section class="hero">
-    <div class="hero-eyebrow"><span>Para negócios locais que querem ser encontrados</span> · Caxias do Sul, BR</div>
     <h1>
       Software <em>devagar</em><br>
       e sempre. Para<br>
       quem cansou<br>
       de <span class="strike">milagres</span> <em>em 7 dias</em>.
     </h1>
-    <p class="hero-sub">
-      O <strong>Dalmas Studio</strong> faz <strong>sites e sistemas sob medida</strong> para pequenos negócios em Caxias do Sul e região — com <strong>hospedagem própria cobrada em mensalidade</strong>, preço fechado sem surpresa e diagnóstico em até 7 dias.
-    </p>
     <div class="hero-actions">
       <a href="https://wa.me/5554984096156" target="_blank" rel="noopener" class="btn btn-primary">Quero um orçamento grátis →</a>
       <a href="#projetos" class="btn btn-ghost">Ver projetos</a>
     </div>
+  </section>
+
+  <!-- Apresentação -->
+  <section class="section intro" id="sobre">
+    <h2 class="intro-title">Sites e sistemas <em>sob medida</em> para pequenos negócios em Caxias do Sul</h2>
+    <p class="hero-sub">
+      O <strong>Dalmas Studio</strong> cria <strong>landing pages e sistemas web</strong> feitos para o seu negócio, sem template. Em <strong>até 7 dias</strong> você recebe o diagnóstico do projeto, com <strong>preço fechado</strong> antes de começar. A hospedagem fica com a gente, em uma <strong>mensalidade fixa</strong> e sem surpresas.
+    </p>
 
     <div class="hero-meta">
       <div class="item">
