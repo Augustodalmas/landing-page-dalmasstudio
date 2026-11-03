@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Protótipo A · Narrativa full-bleed | Portfólio Dalmas Studio</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="/public/favicon.ico" sizes="any">
+  <link rel="preload" href="/public/fonts/geist.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/public/fonts/instrument-serif.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/prototipos/base.css">
+  <style>
+    /* ─── A · Narrativa full-bleed ─── */
+    .pa-proj {
+      position: relative;
+      display: flex;
+      align-items: center;
+      padding: 64px 20px;
+      overflow: hidden;
+    }
+
+    /* numeral gigante vazado ao fundo */
+    .pa-ghost {
+      position: absolute;
+      right: -2vw;
+      top: 50%;
+      margin-top: -0.5em;
+      font-family: var(--font-display);
+      font-style: italic;
+      font-size: clamp(240px, 42vw, 680px);
+      line-height: 1;
+      letter-spacing: -0.05em;
+      color: transparent;
+      -webkit-text-stroke: 1px var(--line-strong);
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .pa-glow {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(ellipse 55% 50% at 70% 55%, rgba(var(--accent), 0.16) 0%, transparent 70%);
+    }
+
+    .pa-inner {
+      position: relative;
+      width: 100%;
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      gap: 56px;
+    }
+
+    .pa-num {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      margin: 0 0 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .pa-num::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgb(var(--accent));
+      box-shadow: 0 0 16px rgba(var(--accent), 0.8);
+    }
+
+    .pa-num b { color: var(--ink); font-weight: 400; }
+
+    .pa-name {
+      font-family: var(--font-display);
+      font-weight: 400;
+      font-size: clamp(64px, 12vw, 152px);
+      line-height: 0.9;
+      letter-spacing: -0.04em;
+      margin: 0;
+    }
+
+    .pa-kind {
+      font-family: var(--font-display);
+      font-size: clamp(22px, 2.6vw, 32px);
+      line-height: 1.15;
+      letter-spacing: -0.015em;
+      margin: 16px 0 24px;
+      color: var(--ink-dim);
+    }
+
+    .pa-kind em { font-style: italic; color: var(--shell); }
+
+    .pa-desc {
+      font-size: 16px;
+      line-height: 1.65;
+      color: var(--ink-dim);
+      margin: 0 0 28px;
+      max-width: 440px;
+    }
+
+    .pa-text .tags { margin-bottom: 32px; }
+
+    .pa-visual {
+      position: relative;
+      perspective: 1600px;
+      padding-bottom: 48px;
+    }
+
+    .pa-visual .mock-browser { transform-origin: 50% 100%; }
+
+    .pa-visual .mock-phone {
+      position: absolute;
+      right: -6px;
+      bottom: 0;
+      width: 112px;
+      padding: 4px;
+      border-radius: 22px;
+    }
+
+    .pa-visual .mock-phone .mock-screen { border-radius: 18px; }
+
+    @media (min-width: 768px) {
+      .pa-proj { padding: 96px 40px; }
+      .pa-visual .mock-phone { width: 168px; padding: 6px; border-radius: 30px; right: -20px; }
+      .pa-visual .mock-phone .mock-screen { border-radius: 24px; }
+    }
+
+    @media (min-width: 1024px) {
+      /* 96px de nav fixa no topo: o conteúdo centraliza no espaço visível */
+      .pa-proj { height: 100svh; padding: 136px 56px 40px; }
+
+      .pa-inner {
+        grid-template-columns: 5fr 7fr;
+        align-items: center;
+        gap: 72px;
+      }
+
+      /* alterna o lado do mockup a cada projeto */
+      .pa-proj.is-flip .pa-inner { grid-template-columns: 7fr 5fr; }
+      .pa-proj.is-flip .pa-text { order: 2; }
+      .pa-proj.is-flip .pa-ghost { right: auto; left: -2vw; }
+      .pa-proj.is-flip .pa-glow { background: radial-gradient(ellipse 55% 50% at 30% 55%, rgba(var(--accent), 0.16) 0%, transparent 70%); }
+      .pa-proj.is-flip .mock-phone { right: auto; left: -40px; }
+
+      .pa-visual { padding-bottom: 0; }
+      .pa-visual .mock-phone { width: 196px; right: -40px; bottom: -48px; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav class="nav" aria-label="Principal">
+    <div class="nav-brand">
+      <a href="/"><img src="/public/logo-dalmas-full.png" alt="Dalmas Studio" width="314" height="201"></a>
+    </div>
+    <div class="nav-links">
+      <a href="/">Início</a>
+      <a href="/#servicos">Serviços</a>
+      <a href="/#processo">Processo</a>
+      <a href="/#metodologia">Metodologia</a>
+      <a href="/#contato">Contato</a>
+      <a class="active" href="/portfolio/" aria-current="page">Portfólio</a>
+    </div>
+    <a href="https://wa.me/5554984096156" target="_blank" rel="noopener" class="btn btn-primary nav-cta">Falar no WhatsApp →</a>
+  </nav>
+
+  <main>
+    <header class="p-hero">
+      <p class="eyebrow">Portfólio · <b>Dalmas Studio</b></p>
+      <h1 class="p-title">
+        <span class="line"><span>Projetos <em>reais</em>,</span></span>
+        <span class="line"><span>feitos devagar</span></span>
+        <span class="line"><span>e <em>sempre</em>.</span></span>
+      </h1>
+      <p class="p-sub">Sites e sistemas que estão no ar hoje, atendendo negócios de verdade. Role para ver cada um por dentro.</p>
+      <div class="p-scroll"><i></i>Role para ver</div>
+    </header>
+
+    <!-- 01 · Dauth -->
+    <section class="pa-proj" style="--accent: 176, 98, 62">
+      <div class="pa-glow"></div>
+      <span class="pa-ghost" aria-hidden="true">01</span>
+      <div class="pa-inner">
+        <div class="pa-text">
+          <p class="pa-num"><b>01</b> / 03 · Sistema web</p>
+          <h2 class="pa-name"><span class="line"><span>Dauth</span></span></h2>
+          <p class="pa-kind">Agendamento para <em>salões de beleza</em></p>
+          <p class="pa-desc">Agenda, comissões e caixa num só lugar. Cada profissional tem seu login, a cliente agenda por um link e a dona do salão acompanha o faturamento sem planilha.</p>
+          <ul class="tags">
+            <li>Sistema web</li>
+            <li>Agenda online</li>
+            <li>Comissões</li>
+            <li>Caixa</li>
+          </ul>
+          <a class="proj-link" href="https://dauth.com.br" target="_blank" rel="noopener">dauth.com.br <span>↗</span></a>
+        </div>
+        <div class="pa-visual">
+          <figure class="mock-browser">
+            <div class="mock-bar"><span></span><span></span><span></span><em>dauth.com.br</em></div>
+            <div class="mock-screen"><img src="/public/portfolio/dauth-desktop.webp" alt="Página inicial do Dauth no computador" width="1440" height="2700"></div>
+          </figure>
+          <figure class="mock-phone">
+            <div class="mock-screen"><img src="/public/portfolio/dauth-mobile.webp" alt="Dauth no celular" width="780" height="4800" loading="lazy"></div>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- 02 · Uminum -->
+    <section class="pa-proj is-flip" style="--accent: 26, 167, 161">
+      <div class="pa-glow"></div>
+      <span class="pa-ghost" aria-hidden="true">02</span>
+      <div class="pa-inner">
+        <div class="pa-text">
+          <p class="pa-num"><b>02</b> / 03 · Site institucional</p>
+          <h2 class="pa-name"><span class="line"><span>Uminum</span></span></h2>
+          <p class="pa-kind">Câmaras quentes para <em>injeção plástica</em></p>
+          <p class="pa-desc">Site institucional da Uminum Systems. Apresenta a linha de câmaras quentes, controladores e análise reológica com clareza e leva o visitante direto ao orçamento.</p>
+          <ul class="tags">
+            <li>Site institucional</li>
+            <li>Catálogo de produtos</li>
+            <li>Responsivo</li>
+          </ul>
+          <a class="proj-link" href="https://uminum.com.br" target="_blank" rel="noopener">uminum.com.br <span>↗</span></a>
+        </div>
+        <div class="pa-visual">
+          <figure class="mock-browser">
+            <div class="mock-bar"><span></span><span></span><span></span><em>uminum.com.br</em></div>
+            <div class="mock-screen"><img src="/public/portfolio/uminum-desktop.webp" alt="Página inicial da Uminum no computador" width="1440" height="2700" loading="lazy"></div>
+          </figure>
+          <figure class="mock-phone">
+            <div class="mock-screen"><img src="/public/portfolio/uminum-mobile.webp" alt="Uminum no celular" width="780" height="4800" loading="lazy"></div>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- 03 · Trivector -->
+    <section class="pa-proj" style="--accent: 243, 146, 32">
+      <div class="pa-glow"></div>
+      <span class="pa-ghost" aria-hidden="true">03</span>
+      <div class="pa-inner">
+        <div class="pa-text">
+          <p class="pa-num"><b>03</b> / 03 · Site institucional</p>
+          <h2 class="pa-name"><span class="line"><span>Trivector</span></span></h2>
+          <p class="pa-kind">Engenharia para <em>a indústria</em></p>
+          <p class="pa-desc">Site da Trivector Engenharia, que faz projetos mecânicos e elétricos para a indústria. Organiza doze frentes de serviço e deixa o comercial a um clique.</p>
+          <ul class="tags">
+            <li>Site institucional</li>
+            <li>Serviços</li>
+            <li>Projetos</li>
+          </ul>
+          <a class="proj-link" href="https://trivectorengenharia.com.br" target="_blank" rel="noopener">trivectorengenharia.com.br <span>↗</span></a>
+        </div>
+        <div class="pa-visual">
+          <figure class="mock-browser">
+            <div class="mock-bar"><span></span><span></span><span></span><em>trivectorengenharia.com.br</em></div>
+            <div class="mock-screen"><img src="/public/portfolio/trivector-desktop.webp" alt="Página inicial da Trivector no computador" width="1440" height="2700" loading="lazy"></div>
+          </figure>
+          <figure class="mock-phone">
+            <div class="mock-screen"><img src="/public/portfolio/trivector-mobile.webp" alt="Trivector no celular" width="780" height="4800" loading="lazy"></div>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="end-cta">
+      <h2 data-lines>
+        <span class="line"><span>Tem um negócio</span></span>
+        <span class="line"><span><em>parecido</em>?</span></span>
+      </h2>
+      <p data-reveal>A gente já conhece o problema. Conta o seu caso e em até 7 dias você recebe o diagnóstico com preço fechado.</p>
+      <div class="actions" data-reveal>
+        <a href="https://wa.me/5554984096156" target="_blank" rel="noopener" class="btn btn-primary">Contar o meu caso →</a>
+        <a href="/" class="btn btn-ghost">Voltar ao início</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-brand-col">
+        <div class="footer-brand">
+          <img src="/public/logo-dalmas-full.png" alt="Dalmas Studio" width="314" height="201" loading="lazy">
+        </div>
+        <div class="footer-tag">Devagar e sempre.<br>Software que dura.</div>
+      </div>
+      <div class="footer-nav-cols">
+        <div>
+          <h4>Serviços</h4>
+          <ul>
+            <li><a href="/#servicos">Landing pages</a></li>
+            <li><a href="/#servicos">Sistemas web</a></li>
+            <li><a href="/#servicos">APIs &amp; integrações</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Estúdio</h4>
+          <ul>
+            <li><a href="/#sobre">Sobre</a></li>
+            <li><a href="/portfolio/">Portfólio</a></li>
+            <li><a href="/#processo">Processo</a></li>
+            <li><a href="/#metodologia">Metodologia</a></li>
+            <li><a href="/#faq">Perguntas frequentes</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Contato</h4>
+          <ul>
+            <li><a href="https://wa.me/5554984096156" target="_blank" rel="noopener">WhatsApp</a></li>
+            <li><a href="https://www.linkedin.com/in/augustordalmas/" target="_blank" rel="noopener">LinkedIn</a></li>
+            <li><a href="https://github.com/Augustodalmas" target="_blank" rel="noopener">GitHub</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bot">
+      <span>© 2026 Dalmas Studio · CNPJ 69.765.693/0001-00</span>
+      <span>v1.0 · dalmasstudio.com.br</span>
+    </div>
+  </footer>
+
+  <nav class="proto-switch" aria-label="Protótipos">
+    <a href="/prototipos/a.html" aria-current="page">A<span> · Narrativa</span></a>
+    <a href="/prototipos/b.html">B<span> · Horizontal</span></a>
+    <a href="/prototipos/b2.html">B2<span> · Em U</span></a>
+    <a href="/prototipos/c.html">C<span> · Lista</span></a>
+  </nav>
+
+  <script src="/public/vendor/gsap.min.js"></script>
+  <script src="/public/vendor/ScrollTrigger.min.js"></script>
+  <script src="/prototipos/common.js"></script>
+  <script>
+    const mm = gsap.matchMedia();
+
+    mm.add({ desktop: '(min-width: 1024px)', motion: DS.motionOk }, (ctx) => {
+      if (!ctx.conditions.motion) return;
+      const desktop = ctx.conditions.desktop;
+
+      gsap.utils.toArray('.pa-proj').forEach((section) => {
+        const text = section.querySelectorAll('.pa-num, .pa-kind, .pa-desc, .tags li, .proj-link');
+        const name = section.querySelectorAll('.pa-name .line > span');
+        const browser = section.querySelector('.mock-browser');
+        const phone = section.querySelector('.mock-phone');
+        const [browserScreen, phoneScreen] = section.querySelectorAll('.mock-screen');
+
+        // 1. Texto entra quando a seção aparece (e volta se o usuário subir)
+        gsap.timeline({
+          scrollTrigger: { trigger: section, start: 'top 65%', toggleActions: 'play none none reverse' },
+          defaults: { ease: DS.ease, duration: 1.2 },
+        })
+          .from(name, { yPercent: 110 })
+          .from(text, { autoAlpha: 0, y: 24, stagger: 0.05 }, '<0.15');
+
+        // 2. Chegada: mockup "deita" e se endireita, brilho acende, numeral desliza
+        gsap.timeline({
+          scrollTrigger: { trigger: section, start: 'top bottom', end: desktop ? 'top top' : 'center center', scrub: 1 },
+        })
+          .fromTo(browser, { rotateX: 18, scale: 0.86, y: 80 }, { rotateX: 0, scale: 1, y: 0, ease: 'none' }, 0)
+          .fromTo(phone, { y: 160 }, { y: 0, ease: 'none' }, 0)
+          .from(section.querySelector('.pa-glow'), { autoAlpha: 0, ease: 'none' }, 0)
+          .from(section.querySelector('.pa-ghost'), { yPercent: -20, autoAlpha: 0, ease: 'none' }, 0);
+
+        if (desktop) {
+          // 3. Desktop: a seção fica fixa e o site rola dentro do mockup (celular rola mais rápido)
+          const tl = gsap.timeline({
+            scrollTrigger: { trigger: section, start: 'top top', end: '+=140%', pin: true, scrub: 1, invalidateOnRefresh: true },
+            defaults: { ease: 'none' },
+          });
+          tl.to(browserScreen.querySelector('img'), { y: () => DS.screenTravel(browserScreen) }, 0)
+            .to(phoneScreen.querySelector('img'), { y: () => DS.screenTravel(phoneScreen) }, 0)
+            .fromTo(phone, { y: 0 }, { y: -40, immediateRender: false }, 0)
+            .fromTo(section.querySelector('.pa-ghost'), { yPercent: 0 }, { yPercent: -70, immediateRender: false }, 0);
+        } else {
+          // 3. Celular/tablet: sem fixar, o print rola enquanto a seção atravessa a tela
+          const st = { trigger: section, start: 'top bottom', end: 'bottom top', scrub: 1 };
+          DS.screenScroll(browserScreen, st);
+          DS.screenScroll(phoneScreen, st);
+        }
+      });
+    });
+  </script>
+</body>
+
+</html>

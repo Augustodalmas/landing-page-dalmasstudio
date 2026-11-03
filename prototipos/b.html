@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Protótipo B · Scroll horizontal | Portfólio Dalmas Studio</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="/public/favicon.ico" sizes="any">
+  <link rel="preload" href="/public/fonts/geist.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/public/fonts/instrument-serif.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/prototipos/base.css">
+  <style>
+    /* ─── B · Scroll horizontal fixado ─── */
+    .pb { position: relative; }
+
+    .pb-track {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .pb-panel {
+      position: relative;
+      padding: 72px 20px;
+    }
+
+    .pb-intro-title {
+      font-family: var(--font-display);
+      font-weight: 400;
+      font-size: clamp(44px, 8vw, 104px);
+      line-height: 0.95;
+      letter-spacing: -0.035em;
+      margin: 0;
+    }
+
+    .pb-intro-title em { font-style: italic; color: var(--shell); }
+
+    .pb-hint {
+      display: none;
+      margin-top: 40px;
+      align-items: center;
+      gap: 14px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+    }
+
+    .pb-hint i {
+      position: relative;
+      width: 64px;
+      height: 1px;
+      background: var(--line-strong);
+      overflow: hidden;
+    }
+
+    .pb-hint i::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -40%;
+      width: 40%;
+      height: 1px;
+      background: var(--shell);
+      animation: hint-x 2.2s var(--ease-out) infinite;
+    }
+
+    @keyframes hint-x { to { left: 100%; } }
+
+    .pb-proj {
+      display: grid;
+      gap: 40px;
+      align-items: center;
+    }
+
+    .pb-proj::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(ellipse 50% 55% at 35% 50%, rgba(var(--accent), 0.15) 0%, transparent 70%);
+    }
+
+    .pb-visual {
+      position: relative;
+      perspective: 1800px;
+      padding-bottom: 40px;
+    }
+
+    .pb-visual .mock-phone {
+      position: absolute;
+      left: -8px;
+      bottom: 0;
+      width: 110px;
+      padding: 4px;
+      border-radius: 22px;
+    }
+
+    .pb-visual .mock-phone .mock-screen { border-radius: 18px; }
+
+    .pb-text { position: relative; }
+
+    .pb-num {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      margin: 0 0 16px;
+    }
+
+    .pb-num b { color: rgb(var(--accent)); font-weight: 400; }
+
+    .pb-name {
+      font-family: var(--font-display);
+      font-weight: 400;
+      font-size: clamp(56px, 9vw, 128px);
+      line-height: 0.9;
+      letter-spacing: -0.04em;
+      margin: 0 0 16px;
+    }
+
+    .pb-kind {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-size: clamp(22px, 2.4vw, 30px);
+      line-height: 1.15;
+      color: var(--shell);
+      margin: 0 0 24px;
+    }
+
+    .pb-desc {
+      font-size: 16px;
+      line-height: 1.65;
+      color: var(--ink-dim);
+      margin: 0 0 28px;
+      max-width: 420px;
+    }
+
+    .pb-text .tags { margin-bottom: 32px; }
+
+    /* HUD: contador + barra de progresso (só no desktop) */
+    .pb-hud {
+      display: none;
+      position: absolute;
+      left: 56px;
+      right: 56px;
+      bottom: 40px;
+      align-items: center;
+      gap: 24px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+    }
+
+    .pb-count b { color: var(--ink); font-weight: 400; display: inline-block; min-width: 2ch; }
+
+    .pb-bar {
+      flex: 1;
+      height: 1px;
+      background: var(--line-strong);
+      overflow: hidden;
+    }
+
+    .pb-bar i {
+      display: block;
+      height: 100%;
+      background: var(--shell);
+      transform: scaleX(0);
+      transform-origin: 0 50%;
+    }
+
+    @media (min-width: 768px) {
+      .pb-panel { padding: 96px 40px; }
+      .pb-visual .mock-phone { width: 160px; padding: 6px; border-radius: 30px; left: -20px; }
+      .pb-visual .mock-phone .mock-screen { border-radius: 24px; }
+    }
+
+    @media (min-width: 1024px) {
+      .pb {
+        height: 100svh;
+        overflow: hidden;
+      }
+
+      .pb-track {
+        flex-direction: row;
+        height: 100%;
+        width: max-content;
+        will-change: transform;
+      }
+
+      .pb-panel {
+        flex: 0 0 auto;
+        height: 100%;
+        padding: 96px 56px 120px;
+      }
+
+      .pb-intro {
+        width: 56vw;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding-left: 56px;
+      }
+
+      .pb-hint { display: inline-flex; }
+
+      .pb-proj {
+        width: 100vw;
+        grid-template-columns: 7fr 5fr;
+        gap: 72px;
+        padding-left: 112px;
+        padding-right: 112px;
+      }
+
+      .pb-visual { padding-bottom: 0; }
+      .pb-visual .mock-phone { width: 190px; left: -48px; bottom: -40px; }
+
+      .pb-hud { display: flex; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav class="nav" aria-label="Principal">
+    <div class="nav-brand">
+      <a href="/"><img src="/public/logo-dalmas-full.png" alt="Dalmas Studio" width="314" height="201"></a>
+    </div>
+    <div class="nav-links">
+      <a href="/">Início</a>
+      <a href="/#servicos">Serviços</a>
+      <a href="/#processo">Processo</a>
+      <a href="/#metodologia">Metodologia</a>
+      <a href="/#contato">Contato</a>
+      <a class="active" href="/portfolio/" aria-current="page">Portfólio</a>
+    </div>
+    <a href="https://wa.me/5554984096156" target="_blank" rel="noopener" class="btn btn-primary nav-cta">Falar no WhatsApp →</a>
+  </nav>
+
+  <main>
+    <header class="p-hero">
+      <p class="eyebrow">Portfólio · <b>Dalmas Studio</b></p>
+      <h1 class="p-title">
+        <span class="line"><span>Projetos <em>reais</em>,</span></span>
+        <span class="line"><span>feitos devagar</span></span>
+        <span class="line"><span>e <em>sempre</em>.</span></span>
+      </h1>
+      <p class="p-sub">Sites e sistemas que estão no ar hoje, atendendo negócios de verdade. Role para percorrer cada um.</p>
+      <div class="p-scroll"><i></i>Role para ver</div>
+    </header>
+
+    <section class="pb" aria-label="Projetos">
+      <div class="pb-track">
+
+        <div class="pb-panel pb-intro">
+          <p class="eyebrow">Projetos selecionados</p>
+          <h2 class="pb-intro-title" data-lines>
+            <span class="line"><span>Três negócios,</span></span>
+            <span class="line"><span><em>três</em> soluções</span></span>
+            <span class="line"><span>sob medida.</span></span>
+          </h2>
+          <div class="pb-hint"><i></i>Continue rolando</div>
+        </div>
+
+        <!-- 01 · Dauth -->
+        <article class="pb-panel pb-proj" style="--accent: 176, 98, 62">
+          <div class="pb-visual">
+            <figure class="mock-browser">
+              <div class="mock-bar"><span></span><span></span><span></span><em>dauth.com.br</em></div>
+              <div class="mock-screen"><img src="/public/portfolio/dauth-desktop.webp" alt="Página inicial do Dauth no computador" width="1440" height="2700"></div>
+            </figure>
+            <figure class="mock-phone">
+              <div class="mock-screen"><img src="/public/portfolio/dauth-mobile.webp" alt="Dauth no celular" width="780" height="4800" loading="lazy"></div>
+            </figure>
+          </div>
+          <div class="pb-text">
+            <p class="pb-num"><b>01</b> · Sistema web</p>
+            <h2 class="pb-name">Dauth</h2>
+            <p class="pb-kind">Agendamento para salões de beleza</p>
+            <p class="pb-desc">Agenda, comissões e caixa num só lugar. Cada profissional tem seu login, a cliente agenda por um link e a dona do salão acompanha o faturamento sem planilha.</p>
+            <ul class="tags">
+              <li>Sistema web</li>
+              <li>Agenda online</li>
+              <li>Comissões</li>
+              <li>Caixa</li>
+            </ul>
+            <a class="proj-link" href="https://dauth.com.br" target="_blank" rel="noopener">dauth.com.br <span>↗</span></a>
+          </div>
+        </article>
+
+        <!-- 02 · Uminum -->
+        <article class="pb-panel pb-proj" style="--accent: 26, 167, 161">
+          <div class="pb-visual">
+            <figure class="mock-browser">
+              <div class="mock-bar"><span></span><span></span><span></span><em>uminum.com.br</em></div>
+              <div class="mock-screen"><img src="/public/portfolio/uminum-desktop.webp" alt="Página inicial da Uminum no computador" width="1440" height="2700" loading="lazy"></div>
+            </figure>
+            <figure class="mock-phone">
+              <div class="mock-screen"><img src="/public/portfolio/uminum-mobile.webp" alt="Uminum no celular" width="780" height="4800" loading="lazy"></div>
+            </figure>
+          </div>
+          <div class="pb-text">
+            <p class="pb-num"><b>02</b> · Site institucional</p>
+            <h2 class="pb-name">Uminum</h2>
+            <p class="pb-kind">Câmaras quentes para injeção plástica</p>
+            <p class="pb-desc">Site institucional da Uminum Systems. Apresenta a linha de câmaras quentes, controladores e análise reológica com clareza e leva o visitante direto ao orçamento.</p>
+            <ul class="tags">
+              <li>Site institucional</li>
+              <li>Catálogo de produtos</li>
+              <li>Responsivo</li>
+            </ul>
+            <a class="proj-link" href="https://uminum.com.br" target="_blank" rel="noopener">uminum.com.br <span>↗</span></a>
+          </div>
+        </article>
+
+        <!-- 03 · Trivector -->
+        <article class="pb-panel pb-proj" style="--accent: 243, 146, 32">
+          <div class="pb-visual">
+            <figure class="mock-browser">
+              <div class="mock-bar"><span></span><span></span><span></span><em>trivectorengenharia.com.br</em></div>
+              <div class="mock-screen"><img src="/public/portfolio/trivector-desktop.webp" alt="Página inicial da Trivector no computador" width="1440" height="2700" loading="lazy"></div>
+            </figure>
+            <figure class="mock-phone">
+              <div class="mock-screen"><img src="/public/portfolio/trivector-mobile.webp" alt="Trivector no celular" width="780" height="4800" loading="lazy"></div>
+            </figure>
+          </div>
+          <div class="pb-text">
+            <p class="pb-num"><b>03</b> · Site institucional</p>
+            <h2 class="pb-name">Trivector</h2>
+            <p class="pb-kind">Engenharia para a indústria</p>
+            <p class="pb-desc">Site da Trivector Engenharia, que faz projetos mecânicos e elétricos para a indústria. Organiza doze frentes de serviço e deixa o comercial a um clique.</p>
+            <ul class="tags">
+              <li>Site institucional</li>
+              <li>Serviços</li>
+              <li>Projetos</li>
+            </ul>
+            <a class="proj-link" href="https://trivectorengenharia.com.br" target="_blank" rel="noopener">trivectorengenharia.com.br <span>↗</span></a>
+          </div>
+        </article>
+
+      </div>
+
+      <div class="pb-hud" aria-hidden="true">
+        <span class="pb-count"><b>00</b> / 03</span>
+        <div class="pb-bar"><i></i></div>
+      </div>
+    </section>
+
+    <section class="end-cta">
+      <h2 data-lines>
+        <span class="line"><span>Tem um negócio</span></span>
+        <span class="line"><span><em>parecido</em>?</span></span>
+      </h2>
+      <p data-reveal>A gente já conhece o problema. Conta o seu caso e em até 7 dias você recebe o diagnóstico com preço fechado.</p>
+      <div class="actions" data-reveal>
+        <a href="https://wa.me/5554984096156" target="_blank" rel="noopener" class="btn btn-primary">Contar o meu caso →</a>
+        <a href="/" class="btn btn-ghost">Voltar ao início</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-brand-col">
+        <div class="footer-brand">
+          <img src="/public/logo-dalmas-full.png" alt="Dalmas Studio" width="314" height="201" loading="lazy">
+        </div>
+        <div class="footer-tag">Devagar e sempre.<br>Software que dura.</div>
+      </div>
+      <div class="footer-nav-cols">
+        <div>
+          <h4>Serviços</h4>
+          <ul>
+            <li><a href="/#servicos">Landing pages</a></li>
+            <li><a href="/#servicos">Sistemas web</a></li>
+            <li><a href="/#servicos">APIs &amp; integrações</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Estúdio</h4>
+          <ul>
+            <li><a href="/#sobre">Sobre</a></li>
+            <li><a href="/portfolio/">Portfólio</a></li>
+            <li><a href="/#processo">Processo</a></li>
+            <li><a href="/#metodologia">Metodologia</a></li>
+            <li><a href="/#faq">Perguntas frequentes</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Contato</h4>
+          <ul>
+            <li><a href="https://wa.me/5554984096156" target="_blank" rel="noopener">WhatsApp</a></li>
+            <li><a href="https://www.linkedin.com/in/augustordalmas/" target="_blank" rel="noopener">LinkedIn</a></li>
+            <li><a href="https://github.com/Augustodalmas" target="_blank" rel="noopener">GitHub</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bot">
+      <span>© 2026 Dalmas Studio · CNPJ 69.765.693/0001-00</span>
+      <span>v1.0 · dalmasstudio.com.br</span>
+    </div>
+  </footer>
+
+  <nav class="proto-switch" aria-label="Protótipos">
+    <a href="/prototipos/a.html">A<span> · Narrativa</span></a>
+    <a href="/prototipos/b.html" aria-current="page">B<span> · Horizontal</span></a>
+    <a href="/prototipos/b2.html">B2<span> · Em U</span></a>
+    <a href="/prototipos/c.html">C<span> · Lista</span></a>
+  </nav>
+
+  <script src="/public/vendor/gsap.min.js"></script>
+  <script src="/public/vendor/ScrollTrigger.min.js"></script>
+  <script src="/prototipos/common.js"></script>
+  <script>
+    const mm = gsap.matchMedia();
+    const panels = gsap.utils.toArray('.pb-proj');
+
+    mm.add({ desktop: '(min-width: 1024px)', motion: DS.motionOk }, (ctx) => {
+      if (!ctx.conditions.motion) return;
+
+      if (!ctx.conditions.desktop) {
+        // Celular/tablet: pilha vertical com entradas e print rolando
+        panels.forEach((panel) => {
+          gsap.from(panel.querySelectorAll('.pb-num, .pb-name, .pb-kind, .pb-desc, .tags li, .proj-link'), {
+            autoAlpha: 0, y: 24, stagger: 0.05, duration: 1.1, ease: DS.ease,
+            scrollTrigger: { trigger: panel.querySelector('.pb-text'), start: 'top 85%', once: true },
+          });
+          const st = { trigger: panel, start: 'top bottom', end: 'bottom top', scrub: 1 };
+          panel.querySelectorAll('.mock-screen').forEach((s) => DS.screenScroll(s, st));
+        });
+        return;
+      }
+
+      // Desktop: rolagem vertical vira deslocamento horizontal
+      const track = document.querySelector('.pb-track');
+      const bar = document.querySelector('.pb-bar i');
+      const count = document.querySelector('.pb-count b');
+      const distance = () => track.scrollWidth - window.innerWidth;
+
+      const slide = gsap.to(track, {
+        x: () => -distance(),
+        ease: 'none',
+        scrollTrigger: {
+          trigger: '.pb',
+          start: 'top top',
+          end: () => '+=' + distance(),
+          pin: true,
+          scrub: 1,
+          invalidateOnRefresh: true,
+          onUpdate: (self) => gsap.set(bar, { scaleX: self.progress }),
+        },
+      });
+
+      panels.forEach((panel, i) => {
+        const along = { containerAnimation: slide, trigger: panel };
+        const browser = panel.querySelector('.mock-browser');
+
+        // Mockup gira levemente ao entrar e ao sair de cena
+        gsap.timeline({ scrollTrigger: { ...along, start: 'left right', end: 'right left', scrub: true }, defaults: { ease: 'none' } })
+          .fromTo(browser, { rotateY: -24, scale: 0.84 }, { rotateY: 0, scale: 1 })
+          .to(browser, { rotateY: 16, scale: 0.9 });
+
+        // Celular desliza num ritmo diferente (profundidade)
+        gsap.fromTo(panel.querySelector('.mock-phone'), { xPercent: 60, y: 60 }, {
+          xPercent: -30, y: -20, ease: 'none',
+          scrollTrigger: { ...along, start: 'left right', end: 'right left', scrub: true },
+        });
+
+        // Sites rolam por dentro enquanto o painel atravessa
+        panel.querySelectorAll('.mock-screen').forEach((s) =>
+          DS.screenScroll(s, { ...along, start: 'left 80%', end: 'right 20%', scrub: true })
+        );
+
+        // Nome com parallax horizontal e texto entrando em sequência
+        gsap.fromTo(panel.querySelector('.pb-name'), { x: 120 }, {
+          x: -60, ease: 'none',
+          scrollTrigger: { ...along, start: 'left right', end: 'right left', scrub: true },
+        });
+        gsap.from(panel.querySelectorAll('.pb-num, .pb-kind, .pb-desc, .tags li, .proj-link'), {
+          autoAlpha: 0, x: 48, stagger: 0.05, duration: 1.1, ease: DS.ease,
+          scrollTrigger: { ...along, start: 'left 55%', toggleActions: 'play none none reverse' },
+        });
+
+        // Contador 01/03 acompanha o painel que está no centro
+        ScrollTrigger.create({
+          ...along,
+          start: 'left center',
+          end: 'right center',
+          onToggle: (self) => { if (self.isActive) count.textContent = String(i + 1).padStart(2, '0'); },
+          onLeaveBack: () => { if (i === 0) count.textContent = '00'; },
+        });
+      });
+    });
+  </script>
+</body>
+
+</html>

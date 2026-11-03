@@ -47,8 +47,8 @@
     "name": "Dalmas Studio",
     "taxID": "69.765.693/0001-00",
     "url": "https://dalmasstudio.com.br",
-    "logo": "https://dalmasstudio.com.br/public/logo-dalmas-full.png",
-    "image": "https://dalmasstudio.com.br/public/logo-dalmas-full.png",
+    "logo": "https://dalmasstudio.com.br/public/dalmas-studio-logo-completo-2000px.png",
+    "image": "https://dalmasstudio.com.br/public/dalmas-studio-logo-completo-2000px.png",
     "description": "Estúdio de desenvolvimento web especializado em landing pages e sistemas sob medida para pequenos negócios. Hospedagem com mensalidade fixa, preço fechado.",
     "telephone": "+55-54-98409-6156",
     "address": {
@@ -184,6 +184,20 @@
       --r-3: 14px;
       --r-4: 20px;
       --r-pill: 999px;
+      /* altura da nav (sticky): o hero e a seção Projetos descontam ela da tela */
+      --nav-h: 72px;
+    }
+
+    @media (min-width: 768px) {
+      :root {
+        --nav-h: 88px;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      :root {
+        --nav-h: 96px;
+      }
     }
 
     /* ─── Reset ─── */
@@ -275,7 +289,7 @@
     }
 
     .nav-brand img {
-      height: 32px;
+      height: 38px;
       width: auto;
       object-fit: contain;
     }
@@ -285,8 +299,8 @@
     }
 
     .nav-cta {
-      font-size: 13px;
-      padding: 10px 16px;
+      font-size: 11px;
+      padding: 9px 14px;
     }
 
     @media (min-width: 768px) {
@@ -295,11 +309,10 @@
       }
 
       .nav-brand img {
-        height: 36px;
+        height: 46px;
       }
 
       .nav-links {
-        display: flex;
         gap: 24px;
         font-size: 13px;
         color: var(--ink-dim);
@@ -311,23 +324,189 @@
       }
 
       .nav-cta {
-        font-size: 14px;
-        padding: 14px 22px;
+        font-size: 12px;
+        padding: 12px 19px;
+      }
+    }
+
+    /* Abaixo de 900px os links não cabem ao lado do logo e do botão */
+    @media (min-width: 900px) {
+      .nav-links {
+        display: flex;
       }
     }
 
     @media (min-width: 1024px) {
+      /* Conteúdo alinhado à coluna de 1400px das seções; fundo continua de ponta a ponta */
       .nav {
-        padding: 24px 56px;
+        padding: 24px max(56px, calc((100% - 1400px) / 2 + 56px));
       }
 
       .nav-brand img {
-        height: 40px;
+        height: 46px;
       }
 
       .nav-links {
         gap: 32px;
         font-size: 14px;
+      }
+    }
+
+    /* ─── Menu do celular (abaixo de 900px, public/js/menu.js) ───
+       O botão só aparece com JS (html.has-menu). O painel fica fora da .nav porque o
+       backdrop-filter dela prenderia o position: fixed dentro do navbar. */
+    .nav-toggle {
+      display: none;
+      position: relative;
+      flex: none;
+      width: 40px;
+      height: 40px;
+      margin-left: 10px;
+      border-radius: 50%;
+      border: 1px solid var(--line-strong);
+      transition: border-color 200ms ease;
+    }
+
+    .has-menu .nav-toggle {
+      display: block;
+    }
+
+    /* empurra botão do WhatsApp + menu para a direita */
+    .has-menu .nav-cta {
+      margin-left: auto;
+    }
+
+    .nav-toggle span {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 16px;
+      height: 1.5px;
+      margin: -0.75px 0 0 -8px;
+      border-radius: 1px;
+      background: var(--ink);
+      transition: transform 400ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .nav-toggle span:first-child {
+      transform: translateY(-3px);
+    }
+
+    .nav-toggle span:last-child {
+      transform: translateY(3px);
+    }
+
+    .menu-open .nav-toggle {
+      border-color: var(--shell);
+    }
+
+    .menu-open .nav-toggle span:first-child {
+      transform: rotate(45deg);
+    }
+
+    .menu-open .nav-toggle span:last-child {
+      transform: rotate(-45deg);
+    }
+
+    html.menu-open {
+      overflow: hidden;
+    }
+
+    .menu-mobile {
+      position: fixed;
+      inset: 0;
+      z-index: 45;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 104px 20px 32px;
+      overflow-y: auto;
+      background: color-mix(in srgb, var(--bg) 94%, transparent);
+      backdrop-filter: blur(16px);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 300ms ease, visibility 0s linear 300ms;
+    }
+
+    .menu-open .menu-mobile {
+      opacity: 1;
+      visibility: visible;
+      transition: opacity 300ms ease;
+    }
+
+    .menu-mobile nav {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .menu-mobile nav a {
+      display: flex;
+      align-items: baseline;
+      gap: 16px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--line);
+      font-family: var(--font-display);
+      font-size: clamp(36px, 10vw, 56px);
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 400ms ease, transform 600ms cubic-bezier(0.22, 1, 0.36, 1), color 200ms ease;
+    }
+
+    /* links entram em sequência (--i vem do menu.js) */
+    .menu-open .menu-mobile nav a {
+      opacity: 1;
+      transform: none;
+      transition-delay: calc(var(--i) * 50ms + 80ms);
+    }
+
+    .menu-mobile nav a:hover {
+      color: var(--shell);
+    }
+
+    .menu-mobile nav a span {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      color: var(--ink-faint);
+    }
+
+    .menu-tag {
+      margin: 32px 0 0;
+      font-family: var(--font-display);
+      font-style: italic;
+      font-size: 20px;
+      color: var(--ink-dim);
+    }
+
+    @media (min-width: 768px) {
+      .nav-toggle {
+        width: 46px;
+        height: 46px;
+      }
+
+      .menu-mobile {
+        padding: 120px 40px 40px;
+      }
+    }
+
+    @media (min-width: 900px) {
+      .has-menu .nav-toggle,
+      .menu-mobile {
+        display: none;
+      }
+
+      .has-menu .nav-cta {
+        margin-left: 0;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .nav-toggle span,
+      .menu-mobile,
+      .menu-mobile nav a {
+        transition: none;
       }
     }
 
@@ -378,6 +557,65 @@
 
     .hero-actions .btn {
       justify-content: center;
+    }
+
+    /* Hero ocupa 100% da primeira dobra (viewport − nav) em qualquer largura: a apresentação
+       só aparece ao rolar. Em tela baixa (celular deitado) fica no fluxo normal. */
+    @media (min-height: 560px) {
+      .hero {
+        min-height: calc(100vh - var(--nav-h));
+        min-height: calc(100svh - var(--nav-h));
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+    }
+
+    /* Celular em pé: título em 7 linhas curtas com a fonte crescendo até preencher a tela,
+       como no desktop. 40px = padding lateral; 3.25 = linha mais larga ("Para quem") em em;
+       178px = padding 2×24 + botões ~130; 6.5 ≈ 7 linhas × line-height .92 */
+    @media (max-width: 767px) and (min-height: 560px) {
+      .hero {
+        padding-top: 24px;
+        padding-bottom: 24px;
+      }
+
+      .hero h1 {
+        font-size: min(calc((100vw - 40px) / 3.25), calc((100vh - var(--nav-h) - 178px) / 6.5));
+        font-size: min(calc((100vw - 40px) / 3.25), calc((100svh - var(--nav-h) - 178px) / 6.5));
+      }
+
+      .hero .br-d {
+        display: none;
+      }
+
+      .hero .strike::after {
+        height: 4px;
+      }
+
+      /* "Ver projetos" vira um link discreto: o botão principal fica sozinho */
+      .hero-actions .btn-ghost {
+        align-self: center;
+        border-color: transparent;
+        padding: 14px 16px;
+        font-family: var(--font-mono);
+        font-size: 11px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--ink-dim);
+      }
+
+      .hero-actions .btn-ghost::after {
+        content: '↓';
+        content: '↓' / '';
+      }
+    }
+
+    /* fora do celular em pé, as quebras do celular não existem */
+    @media (min-width: 768px), (max-height: 559px) {
+      .hero .br-m {
+        display: none;
+      }
     }
 
     /* ─── Apresentação (texto que saiu do hero) ─── */
@@ -507,22 +745,18 @@
       }
     }
 
-    /* Desktop: hero ocupa 100% da primeira dobra (viewport − nav de 96px).
-       268px = nav 96 + padding 2×40 + botões ~92; 3.68 = 4 linhas × line-height .92 */
+    /* Desktop: o título cresce até preencher a primeira dobra.
+       268px = nav 96 + padding 2×40 + botões ~92; 3.68 = 4 linhas × line-height .92
+       182px = 13% de 1400 (largura máx. do hero): acima disso o título quebra em mais de 4 linhas */
     @media (min-width: 1024px) and (min-height: 560px) {
       .hero {
-        min-height: calc(100vh - 96px);
-        min-height: calc(100svh - 96px);
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
         padding-top: 40px;
         padding-bottom: 40px;
       }
 
       .hero h1 {
-        font-size: clamp(48px, min(13vw, calc((100vh - 268px) / 3.68)), 240px);
-        font-size: clamp(48px, min(13vw, calc((100svh - 268px) / 3.68)), 240px);
+        font-size: clamp(48px, min(13vw, calc((100vh - 268px) / 3.68)), 182px);
+        font-size: clamp(48px, min(13vw, calc((100svh - 268px) / 3.68)), 182px);
       }
 
       .hero-actions {
@@ -584,10 +818,6 @@
     }
 
     /* ─── Services ─── */
-    .services {
-      border-top: 1px solid var(--line);
-    }
-
     .svc {
       display: flex;
       flex-direction: column;
@@ -846,55 +1076,231 @@
       }
     }
 
-    /* ─── Projects ─── */
-    .projects-grid {
+    /* ─── Projects: caminho em U ───
+       O efeito (public/js/projetos.js) põe .is-u na .pu: a seção fica presa na tela e um
+       "mundo" 2×2 anda → ↓ ← (intro → Dauth → Uminum → Trivector), no desktop e no celular.
+       Sem JS, com "reduzir movimento" ou com a tela baixa (< 560px), os painéis ficam empilhados. */
+    .pu {
+      position: relative;
+    }
+
+    .pu-world {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .pu-panel {
+      position: relative;
+      padding: 48px 20px;
+    }
+
+    .pu-hint {
+      display: none;
+      margin-top: 32px;
+      align-items: center;
+      gap: 14px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+    }
+
+    .pu-hint i {
+      position: relative;
+      width: 64px;
+      height: 1px;
+      background: var(--line-strong);
+      overflow: hidden;
+    }
+
+    .pu-hint i::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -40%;
+      width: 40%;
+      height: 1px;
+      background: var(--shell);
+      animation: pu-hint 2.2s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+    }
+
+    @keyframes pu-hint {
+      to {
+        left: 100%;
+      }
+    }
+
+    .pu-proj {
       display: grid;
-      grid-template-columns: 1fr;
-      gap: 16px;
+      gap: 32px;
+      align-items: center;
     }
 
-    .proj-card {
-      background: var(--surface);
-      border: 1px solid var(--line-strong);
-      border-radius: var(--r-3);
-      padding: 28px 24px;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      transition: border-color 200ms ease, transform 200ms ease;
+    /* brilho na cor de cada cliente (--accent no style do painel) */
+    .pu-proj::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(ellipse 50% 55% at 35% 50%, rgba(var(--accent), 0.15) 0%, transparent 70%);
     }
 
-    .proj-card:hover {
-      border-color: var(--shell);
-      transform: translateY(-2px);
+    .pu-visual {
+      position: relative;
+      perspective: 1800px;
+      padding-bottom: 24px;
     }
 
-    .proj-card-top {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      flex: 1;
+    .pu-text {
+      position: relative;
     }
 
-    .proj-card-bot {
-      padding-top: 16px;
-      border-top: 1px solid var(--line);
+    .pu-num {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      margin: 0 0 12px;
     }
 
-    .proj-name {
-      font-family: var(--font-display);
-      font-size: 22px;
-      letter-spacing: -0.015em;
-      line-height: 1.15;
-      margin: 0;
+    .pu-num b {
+      color: rgb(var(--accent));
       font-weight: 400;
     }
 
-    .proj-desc {
-      font-size: 14px;
-      line-height: 1.6;
+    .pu-name {
+      font-family: var(--font-display);
+      font-weight: 400;
+      font-size: clamp(44px, 12vw, 128px);
+      line-height: 0.9;
+      letter-spacing: -0.04em;
+      margin: 0 0 12px;
+    }
+
+    .pu-kind {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-size: clamp(20px, 2.4vw, 30px);
+      line-height: 1.15;
+      color: var(--shell);
+      margin: 0 0 16px;
+    }
+
+    .pu-desc {
+      font-size: 15px;
+      line-height: 1.55;
       color: var(--ink-dim);
+      margin: 0 0 20px;
+      max-width: 440px;
+    }
+
+    /* .svc-tags vem da seção Serviços, que alinha à direita no desktop; aqui fica à esquerda */
+    .pu-tags {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 20px;
+      justify-content: flex-start;
+    }
+
+    .pu-text .svc-tag-link {
+      display: inline-block;
+    }
+
+    /* Mockups: janela de navegador + celular, com o print do site rolando por dentro */
+    .mock-browser {
       margin: 0;
+      border-radius: var(--r-4);
+      background: var(--surface);
+      border: 1px solid var(--line-strong);
+      overflow: hidden;
+      box-shadow: 0 40px 80px -20px rgba(0, 0, 0, 0.7);
+    }
+
+    .mock-bar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .mock-bar span {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--line-strong);
+    }
+
+    .mock-bar em {
+      margin-left: 10px;
+      font-family: var(--font-mono);
+      font-style: normal;
+      font-size: 10px;
+      letter-spacing: 0.04em;
+      color: var(--ink-faint);
+      padding: 3px 12px;
+      border-radius: var(--r-pill);
+      background: rgba(255, 255, 255, 0.04);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .mock-screen {
+      position: relative;
+      aspect-ratio: 16 / 10;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .mock-screen img {
+      width: 100%;
+      height: auto;
+      will-change: transform;
+    }
+
+    .mock-phone {
+      margin: 0;
+      width: 88px;
+      padding: 4px;
+      border-radius: 20px;
+      background: #0d1115;
+      border: 1px solid var(--line-strong);
+      box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.8);
+    }
+
+    .mock-phone .mock-screen {
+      aspect-ratio: 9 / 19.5;
+      border-radius: 16px;
+    }
+
+    .pu-visual .mock-phone {
+      position: absolute;
+      left: -6px;
+      bottom: 0;
+    }
+
+    /* contador 01 / 03 (só com o efeito ligado) */
+    .pu-hud {
+      display: none;
+      position: absolute;
+      left: 20px;
+      bottom: 24px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      color: var(--ink-faint);
+    }
+
+    .pu-hud b {
+      color: var(--ink);
+      font-weight: 400;
+    }
+
+    .section.pu-after {
+      padding-top: 0;
     }
 
     .svc-tag-link {
@@ -927,9 +1333,30 @@
     }
 
     @media (min-width: 768px) {
-      .projects-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 20px;
+      .pu-panel {
+        padding: 64px 40px;
+      }
+
+      .pu-desc {
+        font-size: 16px;
+      }
+
+      .mock-phone {
+        width: 150px;
+        padding: 6px;
+        border-radius: 28px;
+      }
+
+      .mock-phone .mock-screen {
+        border-radius: 22px;
+      }
+
+      .pu-visual .mock-phone {
+        left: -20px;
+      }
+
+      .pu-hud {
+        left: 40px;
       }
 
       .proj-foot {
@@ -940,25 +1367,159 @@
     }
 
     @media (min-width: 1024px) {
-      .projects-grid {
-        grid-template-columns: repeat(3, 1fr);
+      /* mesma coluna de 1400px da nav e das seções */
+      .pu-panel {
+        padding: 80px max(56px, calc((100% - 1400px) / 2 + 56px));
+      }
+
+      .pu-proj {
+        grid-template-columns: 7fr 5fr;
+        gap: 72px;
+      }
+
+      /* Uminum inverte: texto à esquerda, mockup à direita */
+      .pu-proj.is-flip {
+        grid-template-columns: 5fr 7fr;
+      }
+
+      .pu-proj.is-flip .pu-text {
+        order: -1;
+      }
+
+      .pu-proj.is-flip::before {
+        background: radial-gradient(ellipse 50% 55% at 65% 50%, rgba(var(--accent), 0.15) 0%, transparent 70%);
+      }
+
+      .pu-name {
+        font-size: clamp(56px, min(9vw, 14vh), 128px);
+      }
+
+      .pu-visual {
+        padding-bottom: 0;
+      }
+
+      .mock-bar {
+        padding: 12px 16px;
+      }
+
+      .mock-bar em {
+        font-size: 11px;
+      }
+
+      .mock-phone {
+        width: 180px;
+      }
+
+      .pu-visual .mock-phone {
+        left: -40px;
+        bottom: -40px;
+      }
+
+      .pu-proj.is-flip .pu-visual .mock-phone {
+        left: auto;
+        right: -40px;
+      }
+
+      .pu-hud {
+        left: max(56px, calc((100% - 1400px) / 2 + 56px));
+        bottom: 36px;
+      }
+    }
+
+    /* ─── Projects: efeito ligado (.is-u) ─── */
+    .pu.is-u {
+      height: 100vh;
+      height: 100svh;
+      overflow: hidden;
+    }
+
+    .pu.is-u .pu-world {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      width: 200%;
+      height: 200%;
+      will-change: transform;
+    }
+
+    /* nav fixa no topo, contador embaixo */
+    .pu.is-u .pu-panel {
+      padding-top: calc(var(--nav-h) + 16px);
+      padding-bottom: 64px;
+    }
+
+    .pu.is-u .pu-intro {
+      grid-area: 1 / 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .pu.is-u .pu-p1 {
+      grid-area: 1 / 2;
+    }
+
+    .pu.is-u .pu-p2 {
+      grid-area: 2 / 2;
+    }
+
+    .pu.is-u .pu-p3 {
+      grid-area: 2 / 1;
+    }
+
+    .pu.is-u .pu-proj {
+      align-content: center;
+    }
+
+    .pu.is-u .pu-intro .sec-title {
+      font-size: clamp(44px, 11vw, 120px);
+    }
+
+    .pu.is-u .pu-hint,
+    .pu.is-u .pu-hud {
+      display: flex;
+    }
+
+    /* Celular/tablet com o efeito: o mockup encolhe pela altura da tela para o painel caber inteiro.
+       570px ≈ nav + margens + contador + bloco de texto; 1.6 = largura/altura do mockup */
+    @media (max-width: 1023px) {
+      .pu.is-u .pu-proj {
         gap: 24px;
       }
 
-      .proj-card {
-        padding: 32px 28px;
+      .pu.is-u .pu-visual {
+        justify-self: center;
+        width: min(100%, 560px, calc((100vh - 570px) * 1.6));
+        width: min(100%, 560px, calc((100svh - 570px) * 1.6));
+      }
+    }
+
+    /* Celular baixo: as tags saem e o mockup ganha o espaço (490px = 570 − tags) */
+    @media (max-width: 1023px) and (max-height: 740px) {
+      .pu.is-u .pu-tags {
+        display: none;
       }
 
-      .proj-name {
-        font-size: 26px;
+      .pu.is-u .pu-visual {
+        width: min(100%, 560px, calc((100vh - 490px) * 1.6));
+        width: min(100%, 560px, calc((100svh - 490px) * 1.6));
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .pu.is-u .pu-panel {
+        padding-bottom: 96px;
+      }
+
+      /* notebook baixo: o mockup não passa da altura disponível */
+      .pu.is-u .pu-visual {
+        justify-self: center;
+        width: min(100%, calc((100vh - 240px) * 1.6));
+        width: min(100%, calc((100svh - 240px) * 1.6));
       }
     }
 
     /* ─── FAQ ─── */
-    .faq {
-      border-top: 1px solid var(--line);
-    }
-
     .faq details {
       border-bottom: 1px solid var(--line);
       padding: 22px 0;
@@ -1011,6 +1572,8 @@
     /* ─── CTA ─── */
     .cta-wrap {
       padding: 0 20px 40px;
+      max-width: 1400px;
+      margin: 0 auto;
     }
 
     .cta {
@@ -1153,7 +1716,7 @@
     }
 
     .footer-brand img {
-      height: 32px;
+      height: 40px;
       width: auto;
     }
 
@@ -1180,6 +1743,11 @@
     }
 
     @media (min-width: 768px) {
+      .footer {
+        padding-left: 40px;
+        padding-right: 40px;
+      }
+
       .footer-bot {
         flex-direction: row;
         justify-content: space-between;
@@ -1192,7 +1760,7 @@
 
     @media (min-width: 1024px) {
       .footer {
-        padding: 64px 56px 32px;
+        padding: 64px max(56px, calc((100% - 1400px) / 2 + 56px)) 32px;
       }
 
       .footer-grid {
@@ -1213,7 +1781,7 @@
       }
 
       .footer-brand img {
-        height: 36px;
+        height: 48px;
       }
 
       .footer-tag {
@@ -1323,7 +1891,7 @@
   <!-- Nav -->
   <nav class="nav" aria-label="Principal">
     <div class="nav-brand">
-      <a href="/"><img src="/public/logo-dalmas-full.png" alt="Dalmas Studio" width="314" height="201"></a>
+      <a href="/"><img src="/public/dalmas-tartaruga.svg" alt="Dalmas Studio" width="463" height="293"></a>
     </div>
     <div class="nav-links">
       <a class="active" href="/" aria-current="page">Início</a>
@@ -1332,20 +1900,26 @@
       <a href="#metodologia">Metodologia</a>
       <a href="#projetos">Projetos</a>
       <a href="#contato">Contato</a>
-      <a href="https://portfolio-dalmastech.vercel.app/" target="_blank" rel="noopener">Portfólio</a>
     </div>
     <a href="https://wa.me/5554984096156" target="_blank" rel="noopener" class="btn btn-primary nav-cta">Falar no
       WhatsApp →</a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="menu-mobile" aria-label="Abrir menu"><span></span><span></span></button>
   </nav>
+
+  <!-- Menu do celular: os links são copiados da .nav-links por public/js/menu.js -->
+  <div class="menu-mobile" id="menu-mobile">
+    <nav aria-label="Menu"></nav>
+    <p class="menu-tag">Devagar e sempre.</p>
+  </div>
 
   <main>
   <!-- Hero -->
   <section class="hero">
+    <!-- br-d: quebra só do desktop/tablet · br-m: quebra só do celular (linhas curtas, fonte maior) -->
     <h1>
-      Software <em>devagar</em><br>
-      e sempre. Para<br>
-      quem cansou<br>
-      de <span class="strike">milagres</span> <em>em 7 dias</em>.
+      Software <br class="br-m"><em>devagar</em><br>
+      e sempre. <br class="br-m">Para <br class="br-d">quem <br class="br-m">cansou <br class="br-d">de
+      <br class="br-m"><span class="strike">milagres</span> <br class="br-m"><em>em 7 dias</em>.
     </h1>
     <div class="hero-actions">
       <a href="https://wa.me/5554984096156" target="_blank" rel="noopener" class="btn btn-primary">Quero um orçamento grátis →</a>
@@ -1366,15 +1940,15 @@
         <div class="lbl">Sob medida, sem template</div>
       </div>
       <div class="item">
-        <div class="num"><span>1</span></div>
-        <div class="lbl">Mensalidade fixa de hospedagem</div>
+        <div class="num"><span>R$</span> 0</div>
+        <div class="lbl">Pelo diagnóstico</div>
       </div>
       <div class="item">
         <div class="num"><span>&lt;</span>7</div>
         <div class="lbl">Dias para o diagnóstico</div>
       </div>
       <div class="item">
-        <div class="num">3 <span>anos</span></div>
+        <div class="num">1 <span>ano</span></div>
         <div class="lbl">Desenvolvendo para negócios</div>
       </div>
     </div>
@@ -1486,53 +2060,101 @@
     </div>
   </section>
 
-  <!-- Projects -->
-  <section class="section" id="projetos">
-    <div class="sec-head">
-      <h2 class="sec-title">Alguns projetos <em>reais</em><br>que a gente construiu.</h2>
-    </div>
-    <div class="projects-grid">
+  <!-- Projects: caminho em U (efeito em public/js/projetos.js) -->
+  <section id="projetos" aria-labelledby="projetos-titulo">
+    <div class="pu">
+      <div class="pu-world">
 
-      <div class="proj-card">
-        <div class="proj-card-top">
-          <h3 class="proj-name">Dauth — Agendamento para salões</h3>
-          <p class="proj-desc">Sistema completo de agendamento e gerenciamento para pequenos salões de beleza. Gestão de clientes, profissionais e comissões — pensado para o público feminino que valoriza praticidade.</p>
+        <div class="pu-panel pu-intro">
+          <h2 class="sec-title" id="projetos-titulo">Alguns projetos <em>reais</em><br>que a gente construiu.</h2>
+          <div class="pu-hint" aria-hidden="true"><i></i>Continue rolando</div>
         </div>
-        <div class="proj-card-bot">
-          <div class="svc-tags">
+
+        <!-- 01 · Dauth -->
+        <article class="pu-panel pu-proj pu-p1" style="--accent: 176, 98, 62">
+          <div class="pu-visual">
+            <figure class="mock-browser">
+              <div class="mock-bar"><span></span><span></span><span></span><em>dauth.com.br</em></div>
+              <div class="mock-screen"><img src="/public/portfolio/dauth-desktop.webp" alt="Página inicial do Dauth no computador" width="1440" height="2700" loading="lazy"></div>
+            </figure>
+            <figure class="mock-phone">
+              <div class="mock-screen"><img src="/public/portfolio/dauth-mobile.webp" alt="Dauth no celular" width="780" height="4800" loading="lazy"></div>
+            </figure>
+          </div>
+          <div class="pu-text">
+            <p class="pu-num"><b>01</b> · Sistema web</p>
+            <h3 class="pu-name">Dauth</h3>
+            <p class="pu-kind">Agendamento para salões de beleza</p>
+            <p class="pu-desc">Agenda, comissões e caixa num só lugar. Cada profissional tem seu login, a cliente agenda por um link e a dona do salão acompanha o faturamento sem planilha.</p>
+            <ul class="svc-tags pu-tags">
+              <li class="svc-tag">Sistema web</li>
+              <li class="svc-tag">Agenda online</li>
+              <li class="svc-tag">Comissões</li>
+              <li class="svc-tag">Caixa</li>
+            </ul>
             <a href="https://dauth.com.br" target="_blank" rel="noopener" class="svc-tag svc-tag-link">dauth.com.br ↗</a>
           </div>
-        </div>
-      </div>
+        </article>
 
-      <div class="proj-card">
-        <div class="proj-card-top">
-          <h3 class="proj-name">Uminum — Página institucional</h3>
-          <p class="proj-desc">Site institucional moderno para apresentar a empresa, seus serviços e facilitar o contato com clientes. Rápido, responsivo e fácil de atualizar.</p>
-        </div>
-        <div class="proj-card-bot">
-          <div class="svc-tags">
+        <!-- 02 · Uminum -->
+        <article class="pu-panel pu-proj pu-p2 is-flip" style="--accent: 26, 167, 161">
+          <div class="pu-visual">
+            <figure class="mock-browser">
+              <div class="mock-bar"><span></span><span></span><span></span><em>uminum.com.br</em></div>
+              <div class="mock-screen"><img src="/public/portfolio/uminum-desktop.webp" alt="Página inicial da Uminum no computador" width="1440" height="2700" loading="lazy"></div>
+            </figure>
+            <figure class="mock-phone">
+              <div class="mock-screen"><img src="/public/portfolio/uminum-mobile.webp" alt="Uminum no celular" width="780" height="4800" loading="lazy"></div>
+            </figure>
+          </div>
+          <div class="pu-text">
+            <p class="pu-num"><b>02</b> · Site institucional</p>
+            <h3 class="pu-name">Uminum</h3>
+            <p class="pu-kind">Câmaras quentes para injeção plástica</p>
+            <p class="pu-desc">Site institucional da Uminum Systems. Apresenta a linha de câmaras quentes, controladores e análise reológica com clareza e leva o visitante direto ao orçamento.</p>
+            <ul class="svc-tags pu-tags">
+              <li class="svc-tag">Site institucional</li>
+              <li class="svc-tag">Catálogo de produtos</li>
+              <li class="svc-tag">Responsivo</li>
+            </ul>
             <a href="https://uminum.com.br" target="_blank" rel="noopener" class="svc-tag svc-tag-link">uminum.com.br ↗</a>
           </div>
-        </div>
-      </div>
+        </article>
 
-      <div class="proj-card">
-        <div class="proj-card-top">
-          <h3 class="proj-name">Trivector — Página institucional</h3>
-          <p class="proj-desc">Site institucional para apresentar a empresa de engenharia, seus serviços e projetos, facilitando o contato com clientes.</p>
-        </div>
-        <div class="proj-card-bot">
-          <div class="svc-tags">
+        <!-- 03 · Trivector -->
+        <article class="pu-panel pu-proj pu-p3" style="--accent: 243, 146, 32">
+          <div class="pu-visual">
+            <figure class="mock-browser">
+              <div class="mock-bar"><span></span><span></span><span></span><em>trivectorengenharia.com.br</em></div>
+              <div class="mock-screen"><img src="/public/portfolio/trivector-desktop.webp" alt="Página inicial da Trivector no computador" width="1440" height="2700" loading="lazy"></div>
+            </figure>
+            <figure class="mock-phone">
+              <div class="mock-screen"><img src="/public/portfolio/trivector-mobile.webp" alt="Trivector no celular" width="780" height="4800" loading="lazy"></div>
+            </figure>
+          </div>
+          <div class="pu-text">
+            <p class="pu-num"><b>03</b> · Site institucional</p>
+            <h3 class="pu-name">Trivector</h3>
+            <p class="pu-kind">Engenharia para a indústria</p>
+            <p class="pu-desc">Site da Trivector Engenharia, que faz projetos mecânicos e elétricos para a indústria. Organiza doze frentes de serviço e deixa o comercial a um clique.</p>
+            <ul class="svc-tags pu-tags">
+              <li class="svc-tag">Site institucional</li>
+              <li class="svc-tag">Serviços</li>
+              <li class="svc-tag">Projetos</li>
+            </ul>
             <a href="https://trivectorengenharia.com.br" target="_blank" rel="noopener" class="svc-tag svc-tag-link">trivectorengenharia.com.br ↗</a>
           </div>
-        </div>
-      </div>
+        </article>
 
+      </div>
+      <div class="pu-hud" aria-hidden="true"><span><b class="pu-count">00</b> / 03</span></div>
     </div>
-    <div class="proj-foot">
-      <p class="proj-foot-text">Tem um negócio parecido? A gente já conhece o problema.</p>
-      <a href="https://wa.me/5554984096156" target="_blank" rel="noopener" class="btn btn-primary">Contar o meu caso →</a>
+
+    <div class="section pu-after">
+      <div class="proj-foot">
+        <p class="proj-foot-text">Tem um negócio parecido? A gente já conhece o problema.</p>
+        <a href="https://wa.me/5554984096156" target="_blank" rel="noopener" class="btn btn-primary">Contar o meu caso →</a>
+      </div>
     </div>
   </section>
 
@@ -1583,7 +2205,7 @@
     <div class="footer-grid">
       <div class="footer-brand-col">
         <div class="footer-brand">
-          <img src="/public/logo-dalmas-full.png" alt="Dalmas Studio" width="314" height="201" loading="lazy">
+          <img src="/public/dalmas-studio-logo-horizontal.svg" alt="Dalmas Studio" width="911" height="156" loading="lazy">
         </div>
         <div class="footer-tag">Devagar e sempre.<br>Software que dura.</div>
       </div>
@@ -1600,7 +2222,7 @@
           <h4>Estúdio</h4>
           <ul>
             <li><a href="#servicos">Sobre</a></li>
-            <li><a href="https://portfolio-dalmastech.vercel.app/" target="_blank" rel="noopener">Portfólio</a></li>
+            <li><a href="#projetos">Projetos</a></li>
             <li><a href="#processo">Processo</a></li>
             <li><a href="#metodologia">Metodologia</a></li>
             <li><a href="#faq">Perguntas frequentes</a></li>
@@ -1621,6 +2243,14 @@
       <span>v1.0 · dalmasstudio.com.br</span>
     </div>
   </footer>
+
+  <!-- Menu do celular (sem dependências) -->
+  <script src="/public/js/menu.js" defer></script>
+
+  <!-- Animação da seção Projetos (GSAP local, sem CDN) -->
+  <script src="/public/vendor/gsap.min.js" defer></script>
+  <script src="/public/vendor/ScrollTrigger.min.js" defer></script>
+  <script src="/public/js/projetos.js" defer></script>
 
 </body>
 

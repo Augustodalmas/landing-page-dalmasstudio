@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Protótipo C · Lista editorial | Portfólio Dalmas Studio</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="/public/favicon.ico" sizes="any">
+  <link rel="preload" href="/public/fonts/geist.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/public/fonts/instrument-serif.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/prototipos/base.css">
+  <style>
+    /* ─── C · Lista editorial ─── */
+    .pc {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 32px 20px 64px;
+    }
+
+    .pc-head {
+      display: none;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      padding-bottom: 16px;
+    }
+
+    .pc-list { list-style: none; margin: 0; padding: 0; }
+    .pc-row { position: relative; }
+
+    /* linha fina que se desenha no scroll */
+    .pc-line {
+      display: block;
+      height: 1px;
+      background: var(--line-strong);
+      transform-origin: 0 50%;
+    }
+
+    .pc-trigger {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 36px 1fr 32px;
+      grid-template-areas:
+        "num name plus"
+        ". kind .";
+      align-items: center;
+      column-gap: 8px;
+      row-gap: 6px;
+      padding: 28px 0;
+      text-align: left;
+      transition: opacity 400ms var(--ease-out);
+    }
+
+    .pc-num {
+      grid-area: num;
+      align-self: start;
+      padding-top: 0.9em;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      color: var(--ink-faint);
+    }
+
+    .pc-name {
+      grid-area: name;
+      display: block;
+      overflow: hidden;
+      font-family: var(--font-display);
+      font-weight: 400;
+      font-size: clamp(52px, 11vw, 148px);
+      line-height: 1;
+      letter-spacing: -0.04em;
+      padding-bottom: 0.06em;
+      transition: transform 600ms var(--ease-out);
+    }
+
+    /* o GSAP anima o transform deste span na entrada; o hover mexe só no pai */
+    .pc-name-in {
+      display: inline-block;
+      transition: color 400ms ease;
+    }
+
+    .pc-kind {
+      grid-area: kind;
+      font-size: 14px;
+      color: var(--ink-dim);
+    }
+
+    .pc-plus {
+      grid-area: plus;
+      position: relative;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 1px solid var(--line-strong);
+      transition: border-color 300ms ease, background 300ms ease, transform 600ms var(--ease-out);
+    }
+
+    .pc-plus::before,
+    .pc-plus::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 12px;
+      height: 1px;
+      margin-left: -6px;
+      background: var(--ink);
+      transition: transform 500ms var(--ease-out);
+    }
+
+    .pc-plus::after { transform: rotate(90deg); }
+
+    .pc-trigger[aria-expanded="true"] .pc-plus { background: var(--shell); border-color: var(--shell); }
+    .pc-trigger[aria-expanded="true"] .pc-plus::before,
+    .pc-trigger[aria-expanded="true"] .pc-plus::after { background: #07090b; }
+    .pc-trigger[aria-expanded="true"] .pc-plus::after { transform: rotate(0deg); }
+
+    .pc-trigger:focus-visible { outline: 1px solid var(--shell); outline-offset: 4px; border-radius: var(--r-3); }
+
+    /* detalhe expandido */
+    .pc-detail { overflow: hidden; }
+
+    .pc-detail-in {
+      display: grid;
+      gap: 40px;
+      padding: 8px 0 56px;
+    }
+
+    .pc-desc {
+      font-size: 16px;
+      line-height: 1.65;
+      color: var(--ink-dim);
+      margin: 0 0 28px;
+      max-width: 440px;
+    }
+
+    .pc-info .tags { margin-bottom: 32px; }
+
+    .pc-visual {
+      position: relative;
+      padding-bottom: 36px;
+    }
+
+    .pc-visual::before {
+      content: '';
+      position: absolute;
+      inset: -20% -10%;
+      pointer-events: none;
+      background: radial-gradient(ellipse 50% 50% at 50% 50%, rgba(var(--accent), 0.16) 0%, transparent 70%);
+    }
+
+    .pc-visual .mock-browser { position: relative; }
+
+    .pc-visual .mock-phone {
+      position: absolute;
+      right: -6px;
+      bottom: 0;
+      width: 104px;
+      padding: 4px;
+      border-radius: 22px;
+    }
+
+    .pc-visual .mock-phone .mock-screen { border-radius: 18px; }
+
+    /* prévia flutuante que segue o cursor (só desktop com mouse) */
+    .pc-float {
+      position: fixed;
+      left: 0;
+      top: 0;
+      z-index: 40;
+      width: 380px;
+      aspect-ratio: 16 / 10;
+      margin: -118px 0 0 -190px;
+      border-radius: var(--r-4);
+      overflow: hidden;
+      pointer-events: none;
+      visibility: hidden;
+      box-shadow: 0 40px 80px -20px rgba(0, 0, 0, 0.8);
+    }
+
+    .pc-float-reel { height: 300%; }
+
+    .pc-float-reel img {
+      width: 100%;
+      height: 33.3333%;
+      object-fit: cover;
+      object-position: top;
+    }
+
+    @media (min-width: 768px) {
+      .pc { padding: 48px 40px 96px; }
+      .pc-visual .mock-phone { width: 150px; padding: 6px; border-radius: 30px; right: -16px; }
+      .pc-visual .mock-phone .mock-screen { border-radius: 24px; }
+    }
+
+    @media (min-width: 1024px) {
+      .pc { padding: 64px 56px 120px; }
+
+      .pc-head {
+        display: grid;
+        grid-template-columns: 96px 1fr 300px 48px;
+      }
+
+      .pc-trigger {
+        grid-template-columns: 96px 1fr 300px 48px;
+        grid-template-areas: "num name kind plus";
+        padding: 36px 0;
+      }
+
+      .pc-num { align-self: center; padding-top: 0; }
+      .pc-plus { width: 48px; height: 48px; justify-self: end; }
+      .pc-plus::before, .pc-plus::after { width: 16px; margin-left: -8px; }
+
+      /* hover: os outros projetos recuam, o nome desliza e acende */
+      .pc-list:hover .pc-row:not(:hover) .pc-trigger { opacity: 0.32; }
+      .pc-trigger:hover .pc-name { transform: translateX(28px); }
+      .pc-trigger:hover .pc-name-in { color: var(--shell); }
+      .pc-trigger:hover .pc-plus { border-color: var(--shell); }
+
+      .pc-detail-in {
+        grid-template-columns: 96px 4fr 7fr;
+        gap: 0;
+        padding: 0 0 80px;
+      }
+
+      .pc-info { grid-column: 2; padding-right: 56px; padding-top: 16px; }
+      /* a sanfona corta o que vaza (overflow): o celular sobra dentro do padding */
+      .pc-visual { grid-column: 3; padding: 0 48px 40px 0; }
+      .pc-visual .mock-phone { width: 170px; right: 0; bottom: 0; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav class="nav" aria-label="Principal">
+    <div class="nav-brand">
+      <a href="/"><img src="/public/logo-dalmas-full.png" alt="Dalmas Studio" width="314" height="201"></a>
+    </div>
+    <div class="nav-links">
+      <a href="/">Início</a>
+      <a href="/#servicos">Serviços</a>
+      <a href="/#processo">Processo</a>
+      <a href="/#metodologia">Metodologia</a>
+      <a href="/#contato">Contato</a>
+      <a class="active" href="/portfolio/" aria-current="page">Portfólio</a>
+    </div>
+    <a href="https://wa.me/5554984096156" target="_blank" rel="noopener" class="btn btn-primary nav-cta">Falar no WhatsApp →</a>
+  </nav>
+
+  <main>
+    <header class="p-hero">
+      <p class="eyebrow">Portfólio · <b>Dalmas Studio</b></p>
+      <h1 class="p-title">
+        <span class="line"><span>Projetos <em>reais</em>,</span></span>
+        <span class="line"><span>feitos devagar</span></span>
+        <span class="line"><span>e <em>sempre</em>.</span></span>
+      </h1>
+      <p class="p-sub">Sites e sistemas que estão no ar hoje, atendendo negócios de verdade. Passe o mouse para espiar e clique para abrir.</p>
+      <div class="p-scroll"><i></i>Role para ver</div>
+    </header>
+
+    <section class="pc" aria-label="Projetos">
+      <div class="pc-head" aria-hidden="true"><span>Nº</span><span>Projeto</span><span>Tipo</span><span></span></div>
+      <ol class="pc-list">
+
+        <li class="pc-row" style="--accent: 176, 98, 62">
+          <span class="pc-line"></span>
+          <button class="pc-trigger" aria-expanded="false" aria-controls="pc-1">
+            <span class="pc-num">01</span>
+            <span class="pc-name"><span class="pc-name-in">Dauth</span></span>
+            <span class="pc-kind">Sistema web · Salões de beleza</span>
+            <span class="pc-plus" aria-hidden="true"></span>
+          </button>
+          <div class="pc-detail" id="pc-1" hidden>
+            <div class="pc-detail-in">
+              <div class="pc-info">
+                <p class="pc-desc">Agenda, comissões e caixa num só lugar. Cada profissional tem seu login, a cliente agenda por um link e a dona do salão acompanha o faturamento sem planilha.</p>
+                <ul class="tags">
+                  <li>Sistema web</li>
+                  <li>Agenda online</li>
+                  <li>Comissões</li>
+                  <li>Caixa</li>
+                </ul>
+                <a class="proj-link" href="https://dauth.com.br" target="_blank" rel="noopener">dauth.com.br <span>↗</span></a>
+              </div>
+              <div class="pc-visual">
+                <figure class="mock-browser">
+                  <div class="mock-bar"><span></span><span></span><span></span><em>dauth.com.br</em></div>
+                  <div class="mock-screen"><img src="/public/portfolio/dauth-desktop.webp" alt="Página inicial do Dauth no computador" width="1440" height="2700" loading="lazy"></div>
+                </figure>
+                <figure class="mock-phone">
+                  <div class="mock-screen"><img src="/public/portfolio/dauth-mobile.webp" alt="Dauth no celular" width="780" height="4800" loading="lazy"></div>
+                </figure>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <li class="pc-row" style="--accent: 26, 167, 161">
+          <span class="pc-line"></span>
+          <button class="pc-trigger" aria-expanded="false" aria-controls="pc-2">
+            <span class="pc-num">02</span>
+            <span class="pc-name"><span class="pc-name-in">Uminum</span></span>
+            <span class="pc-kind">Site institucional · Indústria</span>
+            <span class="pc-plus" aria-hidden="true"></span>
+          </button>
+          <div class="pc-detail" id="pc-2" hidden>
+            <div class="pc-detail-in">
+              <div class="pc-info">
+                <p class="pc-desc">Site institucional da Uminum Systems. Apresenta a linha de câmaras quentes, controladores e análise reológica com clareza e leva o visitante direto ao orçamento.</p>
+                <ul class="tags">
+                  <li>Site institucional</li>
+                  <li>Catálogo de produtos</li>
+                  <li>Responsivo</li>
+                </ul>
+                <a class="proj-link" href="https://uminum.com.br" target="_blank" rel="noopener">uminum.com.br <span>↗</span></a>
+              </div>
+              <div class="pc-visual">
+                <figure class="mock-browser">
+                  <div class="mock-bar"><span></span><span></span><span></span><em>uminum.com.br</em></div>
+                  <div class="mock-screen"><img src="/public/portfolio/uminum-desktop.webp" alt="Página inicial da Uminum no computador" width="1440" height="2700" loading="lazy"></div>
+                </figure>
+                <figure class="mock-phone">
+                  <div class="mock-screen"><img src="/public/portfolio/uminum-mobile.webp" alt="Uminum no celular" width="780" height="4800" loading="lazy"></div>
+                </figure>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <li class="pc-row" style="--accent: 243, 146, 32">
+          <span class="pc-line"></span>
+          <button class="pc-trigger" aria-expanded="false" aria-controls="pc-3">
+            <span class="pc-num">03</span>
+            <span class="pc-name"><span class="pc-name-in">Trivector</span></span>
+            <span class="pc-kind">Site institucional · Engenharia</span>
+            <span class="pc-plus" aria-hidden="true"></span>
+          </button>
+          <div class="pc-detail" id="pc-3" hidden>
+            <div class="pc-detail-in">
+              <div class="pc-info">
+                <p class="pc-desc">Site da Trivector Engenharia, que faz projetos mecânicos e elétricos para a indústria. Organiza doze frentes de serviço e deixa o comercial a um clique.</p>
+                <ul class="tags">
+                  <li>Site institucional</li>
+                  <li>Serviços</li>
+                  <li>Projetos</li>
+                </ul>
+                <a class="proj-link" href="https://trivectorengenharia.com.br" target="_blank" rel="noopener">trivectorengenharia.com.br <span>↗</span></a>
+              </div>
+              <div class="pc-visual">
+                <figure class="mock-browser">
+                  <div class="mock-bar"><span></span><span></span><span></span><em>trivectorengenharia.com.br</em></div>
+                  <div class="mock-screen"><img src="/public/portfolio/trivector-desktop.webp" alt="Página inicial da Trivector no computador" width="1440" height="2700" loading="lazy"></div>
+                </figure>
+                <figure class="mock-phone">
+                  <div class="mock-screen"><img src="/public/portfolio/trivector-mobile.webp" alt="Trivector no celular" width="780" height="4800" loading="lazy"></div>
+                </figure>
+              </div>
+            </div>
+          </div>
+        </li>
+
+      </ol>
+      <span class="pc-line"></span>
+    </section>
+
+    <section class="end-cta">
+      <h2 data-lines>
+        <span class="line"><span>Tem um negócio</span></span>
+        <span class="line"><span><em>parecido</em>?</span></span>
+      </h2>
+      <p data-reveal>A gente já conhece o problema. Conta o seu caso e em até 7 dias você recebe o diagnóstico com preço fechado.</p>
+      <div class="actions" data-reveal>
+        <a href="https://wa.me/5554984096156" target="_blank" rel="noopener" class="btn btn-primary">Contar o meu caso →</a>
+        <a href="/" class="btn btn-ghost">Voltar ao início</a>
+      </div>
+    </section>
+  </main>
+
+  <div class="pc-float" aria-hidden="true">
+    <div class="pc-float-reel">
+      <img src="/public/portfolio/dauth-desktop.webp" alt="" width="1440" height="2700">
+      <img src="/public/portfolio/uminum-desktop.webp" alt="" width="1440" height="2700">
+      <img src="/public/portfolio/trivector-desktop.webp" alt="" width="1440" height="2700">
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-brand-col">
+        <div class="footer-brand">
+          <img src="/public/logo-dalmas-full.png" alt="Dalmas Studio" width="314" height="201" loading="lazy">
+        </div>
+        <div class="footer-tag">Devagar e sempre.<br>Software que dura.</div>
+      </div>
+      <div class="footer-nav-cols">
+        <div>
+          <h4>Serviços</h4>
+          <ul>
+            <li><a href="/#servicos">Landing pages</a></li>
+            <li><a href="/#servicos">Sistemas web</a></li>
+            <li><a href="/#servicos">APIs &amp; integrações</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Estúdio</h4>
+          <ul>
+            <li><a href="/#sobre">Sobre</a></li>
+            <li><a href="/portfolio/">Portfólio</a></li>
+            <li><a href="/#processo">Processo</a></li>
+            <li><a href="/#metodologia">Metodologia</a></li>
+            <li><a href="/#faq">Perguntas frequentes</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Contato</h4>
+          <ul>
+            <li><a href="https://wa.me/5554984096156" target="_blank" rel="noopener">WhatsApp</a></li>
+            <li><a href="https://www.linkedin.com/in/augustordalmas/" target="_blank" rel="noopener">LinkedIn</a></li>
+            <li><a href="https://github.com/Augustodalmas" target="_blank" rel="noopener">GitHub</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bot">
+      <span>© 2026 Dalmas Studio · CNPJ 69.765.693/0001-00</span>
+      <span>v1.0 · dalmasstudio.com.br</span>
+    </div>
+  </footer>
+
+  <nav class="proto-switch" aria-label="Protótipos">
+    <a href="/prototipos/a.html">A<span> · Narrativa</span></a>
+    <a href="/prototipos/b.html">B<span> · Horizontal</span></a>
+    <a href="/prototipos/b2.html">B2<span> · Em U</span></a>
+    <a href="/prototipos/c.html" aria-current="page">C<span> · Lista</span></a>
+  </nav>
+
+  <script src="/public/vendor/gsap.min.js"></script>
+  <script src="/public/vendor/ScrollTrigger.min.js"></script>
+  <script src="/prototipos/common.js"></script>
+  <script>
+    const rows = gsap.utils.toArray('.pc-row');
+    const motion = () => window.matchMedia(DS.motionOk).matches;
+    const pans = new Map(); // print rolando sozinho dentro do mockup aberto
+
+    // ─── Abrir / fechar (sanfona: um aberto por vez) ───
+    function setOpen(row, open) {
+      const btn = row.querySelector('.pc-trigger');
+      const detail = row.querySelector('.pc-detail');
+      if ((btn.getAttribute('aria-expanded') === 'true') === open) return;
+      btn.setAttribute('aria-expanded', String(open));
+      gsap.killTweensOf(detail);
+
+      if (open) {
+        detail.hidden = false;
+        if (!motion()) return;
+        gsap.fromTo(detail, { height: 0 }, { height: 'auto', duration: 1, ease: 'expo.out' });
+        gsap.from(detail.querySelectorAll('.pc-desc, .tags li, .proj-link, .mock-browser, .mock-phone'), {
+          autoAlpha: 0, y: 32, stagger: 0.05, duration: 1, ease: DS.ease, delay: 0.1,
+        });
+        detail.querySelectorAll('.mock-screen').forEach((s, i) => {
+          const tween = gsap.to(s.querySelector('img'), {
+            y: () => DS.screenTravel(s), duration: i ? 10 : 14, ease: 'sine.inOut', repeat: -1, yoyo: true, delay: 1,
+          });
+          pans.set(s, tween);
+        });
+      } else {
+        detail.querySelectorAll('.mock-screen').forEach((s) => {
+          pans.get(s)?.kill();
+          pans.delete(s);
+          gsap.set(s.querySelector('img'), { y: 0 });
+        });
+        if (!motion()) { detail.hidden = true; return; }
+        gsap.to(detail, { height: 0, duration: 0.7, ease: 'expo.inOut', onComplete: () => { detail.hidden = true; } });
+      }
+    }
+
+    rows.forEach((row) => {
+      row.querySelector('.pc-trigger').addEventListener('click', () => {
+        const willOpen = row.querySelector('.pc-trigger').getAttribute('aria-expanded') !== 'true';
+        rows.forEach((r) => setOpen(r, r === row && willOpen));
+        ScrollTrigger.refresh();
+      });
+    });
+
+    const mm = gsap.matchMedia();
+
+    // ─── Entrada: linhas se desenham, nomes sobem da máscara ───
+    mm.add(DS.motionOk, () => {
+      gsap.utils.toArray('.pc-line').forEach((line) => {
+        gsap.from(line, {
+          scaleX: 0, duration: 1.6, ease: 'expo.inOut',
+          scrollTrigger: { trigger: line, start: 'top 90%', once: true },
+        });
+      });
+      rows.forEach((row) => {
+        gsap.timeline({ scrollTrigger: { trigger: row, start: 'top 85%', once: true }, defaults: { ease: DS.ease, duration: 1.3 } })
+          .from(row.querySelector('.pc-name-in'), { yPercent: 105 }, 0.15)
+          .from(row.querySelectorAll('.pc-num, .pc-kind, .pc-plus'), { autoAlpha: 0, y: 16, stagger: 0.06 }, 0.3);
+      });
+    });
+
+    // ─── Prévia flutuante: só com mouse, tela grande e movimento liberado ───
+    mm.add(`(min-width: 1024px) and (hover: hover) and (pointer: fine) and ${DS.motionOk}`, () => {
+      const float = document.querySelector('.pc-float');
+      const reel = float.querySelector('.pc-float-reel');
+      const xTo = gsap.quickTo(float, 'x', { duration: 0.7, ease: 'power3' });
+      const yTo = gsap.quickTo(float, 'y', { duration: 0.7, ease: 'power3' });
+      const tilt = gsap.quickTo(float, 'rotation', { duration: 0.9, ease: 'power3' });
+      let lastX = 0;
+
+      const move = (e) => {
+        xTo(e.clientX);
+        yTo(e.clientY);
+        tilt(gsap.utils.clamp(-8, 8, (e.clientX - lastX) * 0.4)); // inclina na direção do movimento
+        lastX = e.clientX;
+      };
+      window.addEventListener('pointermove', move);
+
+      const show = (i, e) => {
+        gsap.set(float, { x: e.clientX, y: e.clientY });
+        gsap.to(float, { autoAlpha: 1, scale: 1, duration: 0.6, ease: DS.ease, overwrite: 'auto' });
+        gsap.to(reel, { yPercent: -i * (100 / 3), duration: 0.9, ease: 'expo.inOut' });
+      };
+      const hide = () => gsap.to(float, { autoAlpha: 0, scale: 0.6, duration: 0.4, ease: 'power3.in', overwrite: 'auto' });
+
+      gsap.set(float, { scale: 0.6, autoAlpha: 0 });
+      rows.forEach((row, i) => {
+        const btn = row.querySelector('.pc-trigger');
+        btn.addEventListener('pointerenter', (e) => {
+          if (btn.getAttribute('aria-expanded') !== 'true') show(i, e);
+        });
+        btn.addEventListener('pointerleave', hide);
+        btn.addEventListener('click', hide);
+      });
+
+      return () => window.removeEventListener('pointermove', move);
+    });
+  </script>
+</body>
+
+</html>
