@@ -7,16 +7,21 @@
 - Sistemas web sob medida: CRMs, painéis e sistemas de agendamento.
 - APIs e integrações: conexão de ERP, loja, WhatsApp e financeiro.
 
+## Páginas
+- [Criação de sites em Caxias do Sul](https://dalmasstudio.com.br/criacao-de-sites-caxias-do-sul/): sites institucionais e landing pages sob medida, preço fechado e hospedagem em mensalidade.
+- [Sistema de agendamento para salão de beleza](https://dalmasstudio.com.br/sistema-de-agendamento-para-salao/): agenda por profissional, agendamento online, comissões, fiado e faturamento.
+
 ## Como trabalhamos
 - Diagnóstico gratuito, escopo e proposta com valores fixos, construção com entregas semanais em ambiente de teste e operação após o lançamento.
 - Todo projeto sai com documentação (fluxos e instruções de operação).
 
 ## Projetos
-- Dauth (https://dauth.com.br): sistema de agendamento e gestão para salões de beleza.
-- Uminum (https://uminum.com.br): site institucional.
-- Trivector Engenharia (https://trivectorengenharia.com.br): site institucional de empresa de engenharia.
+- Dauth (https://dauth.com.br): sistema de agendamento e gestão para salões de beleza. Case: https://dalmasstudio.com.br/cases/dauth/
+- Uminum (https://uminum.com.br): site institucional com catálogo de câmaras quentes para injeção plástica. Case: https://dalmasstudio.com.br/cases/uminum/
+- Trivector Engenharia (https://trivectorengenharia.com.br): site institucional de empresa de engenharia. Case: https://dalmasstudio.com.br/cases/trivector/
 
 ## Contato
+- Fundador: Augusto Dalmas
 - CNPJ: 69.765.693/0001-00
 - Site: https://dalmasstudio.com.br/
 - WhatsApp: https://wa.me/5554984096156

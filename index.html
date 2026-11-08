@@ -44,7 +44,14 @@
   {
     "@context": "https://schema.org",
     "@type": "ProfessionalService",
+    "@id": "https://dalmasstudio.com.br/#empresa",
     "name": "Dalmas Studio",
+    "founder": {
+      "@type": "Person",
+      "name": "Augusto Dalmas",
+      "jobTitle": "Desenvolvedor e fundador",
+      "sameAs": ["https://www.linkedin.com/in/augustordalmas/", "https://github.com/Augustodalmas"]
+    },
     "taxID": "69.765.693/0001-00",
     "url": "https://dalmasstudio.com.br",
     "logo": "https://dalmasstudio.com.br/public/dalmas-studio-logo-completo-2000px.png",
@@ -66,7 +73,7 @@
       { "@type": "City", "name": "Caxias do Sul" },
       { "@type": "AdministrativeArea", "name": "Rio Grande do Sul" }
     ],
-    "serviceType": ["Landing Page", "Sistema Web", "API e Integrações"],
+    "serviceType": ["Criação de sites", "Landing Page", "Sistema Web", "API e Integrações"],
     "contactPoint": {
       "@type": "ContactPoint",
       "telephone": "+55-54-98409-6156",
@@ -517,7 +524,26 @@
       margin: 0 auto;
     }
 
+    /* H1 da página (palavra-chave para o Google); o slogan grande abaixo é um <p> */
     .hero h1 {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 400;
+      line-height: 1.5;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--shell);
+      margin: 0 0 20px;
+    }
+
+    @media (min-width: 768px) {
+      .hero h1 {
+        font-size: 13px;
+        margin-bottom: 24px;
+      }
+    }
+
+    .hero-title {
       font-family: var(--font-display);
       font-size: clamp(48px, 12vw, 144px);
       line-height: 0.92;
@@ -526,7 +552,7 @@
       font-weight: 400;
     }
 
-    .hero h1 em {
+    .hero-title em {
       font-style: italic;
       color: var(--shell);
     }
@@ -573,16 +599,16 @@
 
     /* Celular em pé: título em 7 linhas curtas com a fonte crescendo até preencher a tela,
        como no desktop. 40px = padding lateral; 3.25 = linha mais larga ("Para quem") em em;
-       178px = padding 2×24 + botões ~130; 6.5 ≈ 7 linhas × line-height .92 */
+       232px = padding 2×24 + botões ~130 + H1 pequeno ~54 (até 2 linhas); 6.5 ≈ 7 linhas × line-height .92 */
     @media (max-width: 767px) and (min-height: 560px) {
       .hero {
         padding-top: 24px;
         padding-bottom: 24px;
       }
 
-      .hero h1 {
-        font-size: min(calc((100vw - 40px) / 3.25), calc((100vh - var(--nav-h) - 178px) / 6.5));
-        font-size: min(calc((100vw - 40px) / 3.25), calc((100svh - var(--nav-h) - 178px) / 6.5));
+      .hero-title {
+        font-size: min(calc((100vw - 40px) / 3.25), calc((100vh - var(--nav-h) - 232px) / 6.5));
+        font-size: min(calc((100vw - 40px) / 3.25), calc((100svh - var(--nav-h) - 232px) / 6.5));
       }
 
       .hero .br-d {
@@ -746,7 +772,7 @@
     }
 
     /* Desktop: o título cresce até preencher a primeira dobra.
-       268px = nav 96 + padding 2×40 + botões ~92; 3.68 = 4 linhas × line-height .92
+       312px = nav 96 + padding 2×40 + botões ~92 + H1 pequeno ~44; 3.68 = 4 linhas × line-height .92
        182px = 13% de 1400 (largura máx. do hero): acima disso o título quebra em mais de 4 linhas */
     @media (min-width: 1024px) and (min-height: 560px) {
       .hero {
@@ -754,9 +780,9 @@
         padding-bottom: 40px;
       }
 
-      .hero h1 {
-        font-size: clamp(48px, min(13vw, calc((100vh - 268px) / 3.68)), 182px);
-        font-size: clamp(48px, min(13vw, calc((100svh - 268px) / 3.68)), 182px);
+      .hero-title {
+        font-size: clamp(48px, min(13vw, calc((100vh - 312px) / 3.68)), 182px);
+        font-size: clamp(48px, min(13vw, calc((100svh - 312px) / 3.68)), 182px);
       }
 
       .hero-actions {
@@ -1519,6 +1545,65 @@
       }
     }
 
+    /* link de "saiba mais" no fim da descrição de um serviço */
+    .svc-more {
+      display: inline-block;
+      margin-top: 8px;
+      color: var(--shell);
+      border-bottom: 1px solid rgba(79, 195, 217, 0.3);
+    }
+
+    .svc-more:hover {
+      border-color: var(--shell);
+    }
+
+    .pu-text .svc-tag-link + .svc-tag-link {
+      margin-left: 6px;
+    }
+
+    /* ─── Quem faz ─── */
+    .who {
+      display: grid;
+      gap: 24px;
+    }
+
+    .who-name {
+      font-family: var(--font-display);
+      font-weight: 400;
+      font-size: clamp(32px, 5vw, 56px);
+      letter-spacing: -0.02em;
+      line-height: 1;
+      margin: 0 0 10px;
+    }
+
+    .who-role {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      margin: 0;
+    }
+
+    .who-text p {
+      font-size: 16px;
+      line-height: 1.65;
+      color: var(--ink-dim);
+      margin: 0 0 16px;
+      max-width: 640px;
+    }
+
+    @media (min-width: 1024px) {
+      .who {
+        grid-template-columns: 1fr 1.4fr;
+        gap: 40px;
+      }
+
+      .who-text p {
+        font-size: 17px;
+      }
+    }
+
     /* ─── FAQ ─── */
     .faq details {
       border-bottom: 1px solid var(--line);
@@ -1818,6 +1903,10 @@
     }
 
     .hero h1 {
+      animation: fade-in 0.6s ease both;
+    }
+
+    .hero-title {
       animation: fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
       animation-delay: 0.1s;
     }
@@ -1916,11 +2005,12 @@
   <!-- Hero -->
   <section class="hero">
     <!-- br-d: quebra só do desktop/tablet · br-m: quebra só do celular (linhas curtas, fonte maior) -->
-    <h1>
+    <h1>Criação de sites e sistemas em Caxias do Sul</h1>
+    <p class="hero-title">
       Software <br class="br-m"><em>devagar</em><br>
       e sempre. <br class="br-m">Para <br class="br-d">quem <br class="br-m">cansou <br class="br-d">de
       <br class="br-m"><span class="strike">milagres</span> <br class="br-m"><em>em 7 dias</em>.
-    </h1>
+    </p>
     <div class="hero-actions">
       <a href="https://wa.me/5554984096156" target="_blank" rel="noopener" class="btn btn-primary">Quero um orçamento grátis →</a>
       <a href="#projetos" class="btn btn-ghost">Ver projetos</a>
@@ -1965,14 +2055,14 @@
           <span class="svc-arrow">→</span>
           <h3 class="svc-title">Landing pages</h3>
         </div>
-        <p class="svc-desc">Páginas que vendem. Não as que ganham prêmio. Foco em conversão, performance e SEO.</p>
+        <p class="svc-desc">Páginas que vendem. Não as que ganham prêmio. Foco em conversão, performance e SEO. <a class="svc-more" href="/criacao-de-sites-caxias-do-sul/">Criação de sites em Caxias →</a></p>
       </div>
       <div class="svc">
         <div class="svc-title-wrap">
           <span class="svc-arrow">→</span>
           <h3 class="svc-title">Sistemas web sob medida</h3>
         </div>
-        <p class="svc-desc">Do CRM interno ao painel financeiro. Construído para o seu fluxo, não o de um SaaS genérico.
+        <p class="svc-desc">Do CRM interno ao painel financeiro. Construído para o seu fluxo, não o de um SaaS genérico. <a class="svc-more" href="/sistema-de-agendamento-para-salao/">Exemplo: sistema para salão →</a>
         </p>
       </div>
       <div class="svc">
@@ -2093,6 +2183,7 @@
               <li class="svc-tag">Caixa</li>
             </ul>
             <a href="https://dauth.com.br" target="_blank" rel="noopener" class="svc-tag svc-tag-link">dauth.com.br ↗</a>
+            <a href="/cases/dauth/" class="svc-tag svc-tag-link">Ver case →</a>
           </div>
         </article>
 
@@ -2118,6 +2209,7 @@
               <li class="svc-tag">Responsivo</li>
             </ul>
             <a href="https://uminum.com.br" target="_blank" rel="noopener" class="svc-tag svc-tag-link">uminum.com.br ↗</a>
+            <a href="/cases/uminum/" class="svc-tag svc-tag-link">Ver case →</a>
           </div>
         </article>
 
@@ -2143,6 +2235,7 @@
               <li class="svc-tag">Projetos</li>
             </ul>
             <a href="https://trivectorengenharia.com.br" target="_blank" rel="noopener" class="svc-tag svc-tag-link">trivectorengenharia.com.br ↗</a>
+            <a href="/cases/trivector/" class="svc-tag svc-tag-link">Ver case →</a>
           </div>
         </article>
 
@@ -2154,6 +2247,26 @@
       <div class="proj-foot">
         <p class="proj-foot-text">Tem um negócio parecido? A gente já conhece o problema.</p>
         <a href="https://wa.me/5554984096156" target="_blank" rel="noopener" class="btn btn-primary">Contar o meu caso →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quem faz -->
+  <section class="section" id="quem-faz">
+    <div class="sec-head">
+      <h2 class="sec-title">Quem <em>faz</em>.</h2>
+    </div>
+    <div class="who">
+      <!-- TODO: foto do Augusto (ex.: /public/augusto-dalmas.webp, 400×400, com width/height e alt="Augusto Dalmas") -->
+      <div>
+        <h3 class="who-name">Augusto Dalmas</h3>
+        <p class="who-role">Desenvolvedor e fundador · Caxias do Sul, RS</p>
+      </div>
+      <div class="who-text">
+        <!-- TODO: completar com a trajetória real (formação, anos de experiência, onde trabalhou). -->
+        <p>O Dalmas Studio nasceu em Caxias do Sul para fazer o que agência grande não faz por pequeno negócio: conversar de perto, cobrar um preço que não muda no meio do caminho e continuar junto depois que o site vai ao ar.</p>
+        <p>Quem faz o diagnóstico do seu projeto é quem desenvolve e quem dá o suporte depois. Sem repasse, sem fila de atendimento.</p>
+        <a href="https://www.linkedin.com/in/augustordalmas/" target="_blank" rel="noopener" class="svc-tag svc-tag-link">LinkedIn ↗</a>
       </div>
     </div>
   </section>
@@ -2213,15 +2326,15 @@
         <div>
           <h4>Serviços</h4>
           <ul>
-            <li><a href="#servicos">Landing pages</a></li>
-            <li><a href="#servicos">Sistemas web</a></li>
+            <li><a href="/criacao-de-sites-caxias-do-sul/">Criação de sites</a></li>
+            <li><a href="/sistema-de-agendamento-para-salao/">Sistema para salão</a></li>
             <li><a href="#servicos">APIs &amp; integrações</a></li>
           </ul>
         </div>
         <div>
           <h4>Estúdio</h4>
           <ul>
-            <li><a href="#servicos">Sobre</a></li>
+            <li><a href="#quem-faz">Quem faz</a></li>
             <li><a href="#projetos">Projetos</a></li>
             <li><a href="#processo">Processo</a></li>
             <li><a href="#metodologia">Metodologia</a></li>
